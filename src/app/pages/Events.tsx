@@ -1,106 +1,8 @@
 import { Calendar, MapPin, Users, Video, Building2, ArrowRight, Clock, Star } from "lucide-react";
 import { Link } from "react-router";
+import { useLang } from "../context/LanguageContext";
 
 const EXPAT_IMG = "https://images.unsplash.com/photo-1591115765373-5207764f72e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxleHBhdCUyMGNvbW11bml0eSUyMGludGVybmF0aW9uYWwlMjBwcm9mZXNzaW9uYWxzJTIwbWVldGluZ3xlbnwxfHx8fDE3NzY2MDM0MTh8MA&ixlib=rb-4.1.0&q=80&w=1080";
-
-const upcomingEvents = [
-  {
-    title: "Expat Finance Bootcamp: Berlin",
-    type: "Workshop",
-    format: "In-Person",
-    date: "May 10, 2026",
-    time: "10:00 – 14:00",
-    location: "WeWork Rosenthaler Platz, Berlin",
-    spots: "18 spots left",
-    price: "Free",
-    color: "#00D4AA",
-    bg: "rgba(0,212,170,0.1)",
-    icon: Building2,
-    description:
-      "A half-day intensive covering health insurance setup, ETF portfolio basics, and German tax fundamentals. Perfect for expats in their first year.",
-    tags: ["Health Insurance", "ETFs", "Tax Basics"],
-  },
-  {
-    title: "Ask Me Anything: German Insurance Explained",
-    type: "Webinar",
-    format: "Online",
-    date: "May 17, 2026",
-    time: "18:00 – 19:30",
-    location: "Zoom (link upon registration)",
-    spots: "Open",
-    price: "Free",
-    color: "#60A5FA",
-    bg: "rgba(96,165,250,0.1)",
-    icon: Video,
-    description:
-      "A live Q&A session where our experts answer your most pressing questions about BU, Haftpflicht, and Krankenversicherung — in plain English.",
-    tags: ["BU Insurance", "Haftpflicht", "Q&A"],
-  },
-  {
-    title: "ETF Investment Strategy: From Zero to Sparplan",
-    type: "Workshop",
-    format: "In-Person",
-    date: "May 24, 2026",
-    time: "09:00 – 13:00",
-    location: "Impact Hub, Munich",
-    spots: "12 spots left",
-    price: "Free",
-    color: "#A78BFA",
-    bg: "rgba(167,139,250,0.1)",
-    icon: Building2,
-    description:
-      "Hands-on workshop walking you through opening a broker account, choosing your ETF allocation, and setting up an automated monthly savings plan.",
-    tags: ["ETF Investing", "Sparplan", "Portfolio"],
-  },
-  {
-    title: "Tax Optimization Masterclass for Expats",
-    type: "Masterclass",
-    format: "Online",
-    date: "June 3, 2026",
-    time: "17:30 – 19:00",
-    location: "Zoom + Recording Provided",
-    spots: "Open",
-    price: "Free",
-    color: "#F59E0B",
-    bg: "rgba(245,158,11,0.1)",
-    icon: Video,
-    description:
-      "Deep dive into German tax law for expats: double taxation treaties, deductibles, Steuerklasse optimization, and common filing mistakes to avoid.",
-    tags: ["Tax Strategy", "Steuerklasse", "Deductibles"],
-  },
-  {
-    title: "Expat Networking Evening: Finance & Career",
-    type: "Networking",
-    format: "In-Person",
-    date: "June 12, 2026",
-    time: "19:00 – 22:00",
-    location: "Soho House, Berlin",
-    spots: "40 spots left",
-    price: "Free",
-    color: "#34D399",
-    bg: "rgba(52,211,153,0.1)",
-    icon: Users,
-    description:
-      "Connect with other English-speaking expats in Germany over drinks, share experiences, and meet our Expatrum advisors in a relaxed setting.",
-    tags: ["Networking", "Community", "Berlin"],
-  },
-  {
-    title: "Retirement Planning for Expats Under 40",
-    type: "Workshop",
-    format: "Hybrid",
-    date: "June 20, 2026",
-    time: "10:00 – 12:30",
-    location: "Frankfurt + Zoom",
-    spots: "22 spots left",
-    price: "Free",
-    color: "#F97316",
-    bg: "rgba(249,115,22,0.1)",
-    icon: Building2,
-    description:
-      "Why starting your Altersvorsorge strategy now — even in your 30s — makes a dramatic difference. Covers Riester, ETF pensions, and private options.",
-    tags: ["Altersvorsorge", "Riester", "Retirement"],
-  },
-];
 
 const partners = [
   { name: "InterNations", type: "Expat Community", logo: "🌍" },
@@ -111,13 +13,134 @@ const partners = [
   { name: "Expats in Germany", type: "Facebook Group", logo: "👥" },
 ];
 
-const formatColors: Record<string, string> = {
-  "In-Person": "#00D4AA",
-  "Online": "#60A5FA",
-  "Hybrid": "#A78BFA",
-};
-
 export function Events() {
+  const { t } = useLang();
+
+  const upcomingEvents = [
+    {
+      id: "e1",
+      title: t("events.e1.title"),
+      format: t("events.e1.format"),
+      date: t("events.e1.date"),
+      time: t("events.e1.time"),
+      location: t("events.e1.location"),
+      spots: t("events.e1.spots"),
+      color: "#00D4AA",
+      bg: "rgba(0,212,170,0.1)",
+      icon: Building2,
+      description: t("events.e1.desc"),
+    },
+    {
+      id: "e2",
+      title: t("events.e2.title"),
+      format: t("events.e2.format"),
+      date: t("events.e2.date"),
+      time: t("events.e2.time"),
+      location: t("events.e2.location"),
+      spots: t("events.e2.spots"),
+      color: "#60A5FA",
+      bg: "rgba(96,165,250,0.1)",
+      icon: Video,
+      description: t("events.e2.desc"),
+    },
+    {
+      id: "e3",
+      title: t("events.e3.title"),
+      format: t("events.e3.format"),
+      date: t("events.e3.date"),
+      time: t("events.e3.time"),
+      location: t("events.e3.location"),
+      spots: t("events.e3.spots"),
+      color: "#A78BFA",
+      bg: "rgba(167,139,250,0.1)",
+      icon: Building2,
+      description: t("events.e3.desc"),
+    },
+    {
+      id: "e4",
+      title: t("events.e4.title"),
+      format: t("events.e4.format"),
+      date: t("events.e4.date"),
+      time: t("events.e4.time"),
+      location: t("events.e4.location"),
+      spots: t("events.e4.spots"),
+      color: "#34D399",
+      bg: "rgba(52,211,153,0.1)",
+      icon: Users,
+      description: t("events.e4.desc"),
+    },
+    {
+      id: "e5",
+      title: t("events.e5.title"),
+      format: t("events.e5.format"),
+      date: t("events.e5.date"),
+      time: t("events.e5.time"),
+      location: t("events.e5.location"),
+      spots: t("events.e5.spots"),
+      color: "#F59E0B",
+      bg: "rgba(245,158,11,0.1)",
+      icon: Video,
+      description: t("events.e5.desc"),
+    },
+    {
+      id: "e6",
+      title: t("events.e6.title"),
+      format: t("events.e6.format"),
+      date: t("events.e6.date"),
+      time: t("events.e6.time"),
+      location: t("events.e6.location"),
+      spots: t("events.e6.spots"),
+      color: "#F97316",
+      bg: "rgba(249,115,22,0.1)",
+      icon: Building2,
+      description: t("events.e6.desc"),
+    },
+  ];
+
+  const formatColorMap: Record<string, string> = {
+    [t("events.format.inPerson")]: "#00D4AA",
+    [t("events.format.online")]: "#60A5FA",
+    [t("events.format.hybrid")]: "#A78BFA",
+  };
+
+  const features = [
+    t("events.feature1"),
+    t("events.feature2"),
+    t("events.feature3"),
+  ];
+
+  const corporateFeatures = [
+    t("events.corporate.f1"),
+    t("events.corporate.f2"),
+    t("events.corporate.f3"),
+    t("events.corporate.f4"),
+    t("events.corporate.f5"),
+  ];
+
+  const missionCards = [
+    {
+      icon: "🎓",
+      title: t("events.m1.title"),
+      desc: t("events.m1.desc"),
+      stat: t("events.m1.stat"),
+      color: "#00D4AA",
+    },
+    {
+      icon: "📺",
+      title: t("events.m2.title"),
+      desc: t("events.m2.desc"),
+      stat: t("events.m2.stat"),
+      color: "#60A5FA",
+    },
+    {
+      icon: "🤝",
+      title: t("events.m3.title"),
+      desc: t("events.m3.desc"),
+      stat: t("events.m3.stat"),
+      color: "#A78BFA",
+    },
+  ];
+
   return (
     <div style={{ backgroundColor: "#F5F8FF" }}>
       {/* Hero */}
@@ -134,7 +157,7 @@ export function Events() {
               >
                 <Calendar size={13} style={{ color: "#00D4AA" }} />
                 <span className="text-xs" style={{ color: "#00D4AA", fontWeight: 600 }}>
-                  Free Events for Expats in Germany
+                  {t("events.badge")}
                 </span>
               </div>
               <h1
@@ -145,17 +168,16 @@ export function Events() {
                   lineHeight: 1.15,
                 }}
               >
-                Learn, Connect, and Grow — Together
+                {t("events.heading")}
               </h1>
               <p
                 className="mt-5 max-w-lg"
                 style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.05rem", lineHeight: 1.7 }}
               >
-                Workshops, webinars, and networking events designed specifically for
-                English-speaking expats navigating financial life in Germany.
+                {t("events.subtitle")}
               </p>
               <div className="flex gap-4 mt-8 flex-wrap">
-                {["All Events Free", "English Language", "Expert-Led"].map((item) => (
+                {features.map((item) => (
                   <div key={item} className="flex items-center gap-2">
                     <div
                       className="w-5 h-5 rounded-full flex items-center justify-center"
@@ -184,22 +206,23 @@ export function Events() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-10">
             <h2 style={{ color: "#0B1F3A", fontWeight: 800, fontSize: "1.5rem" }}>
-              Upcoming Events
+              {t("events.upcoming")}
             </h2>
             <span
               className="px-3 py-1.5 rounded-full text-xs"
               style={{ backgroundColor: "rgba(0,212,170,0.1)", color: "#00D4AA", fontWeight: 700 }}
             >
-              {upcomingEvents.length} events this quarter
+              {t("events.thisQuarter").replace("{n}", String(upcomingEvents.length))}
             </span>
           </div>
 
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
             {upcomingEvents.map((event) => {
               const Icon = event.icon;
+              const formatColor = formatColorMap[event.format] ?? "#00D4AA";
               return (
                 <div
-                  key={event.title}
+                  key={event.id}
                   className="rounded-2xl p-6 flex flex-col transition-all"
                   style={{
                     backgroundColor: "#fff",
@@ -227,8 +250,8 @@ export function Events() {
                       <span
                         className="px-2.5 py-1 rounded-full text-xs"
                         style={{
-                          backgroundColor: `${formatColors[event.format]}15`,
-                          color: formatColors[event.format],
+                          backgroundColor: `${formatColor}15`,
+                          color: formatColor,
                           fontWeight: 600,
                         }}
                       >
@@ -242,7 +265,7 @@ export function Events() {
                           fontWeight: 700,
                         }}
                       >
-                        {event.price}
+                        Free
                       </span>
                     </div>
                   </div>
@@ -277,27 +300,11 @@ export function Events() {
                     ))}
                   </div>
 
-                  {/* Tags */}
-                  <div className="flex gap-1.5 flex-wrap mb-5">
-                    {event.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-1 rounded-full text-xs"
-                        style={{
-                          backgroundColor: "#F1F5F9",
-                          color: "#374151",
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
                   <button
                     className="flex items-center justify-center gap-2 py-3 rounded-xl transition-all text-sm"
                     style={{
                       backgroundColor: event.color,
-                      color: event.color === "#F59E0B" ? "#0B1F3A" : "#0B1F3A",
+                      color: "#0B1F3A",
                       fontWeight: 700,
                     }}
                     onMouseEnter={(e) => {
@@ -307,7 +314,7 @@ export function Events() {
                       (e.currentTarget as HTMLButtonElement).style.opacity = "1";
                     }}
                   >
-                    Register Free <ArrowRight size={15} />
+                    {t("events.register")} <ArrowRight size={15} />
                   </button>
                 </div>
               );
@@ -327,7 +334,7 @@ export function Events() {
               >
                 <Building2 size={13} style={{ color: "#00D4AA" }} />
                 <span className="text-xs" style={{ color: "#00D4AA", fontWeight: 600 }}>
-                  Corporate Partnerships
+                  {t("events.corporate.badge")}
                 </span>
               </div>
               <h2
@@ -338,24 +345,16 @@ export function Events() {
                   lineHeight: 1.2,
                 }}
               >
-                Bring Financial Literacy to Your Company's Expat Team
+                {t("events.corporate.title")}
               </h2>
               <p
                 className="mt-4 mb-8"
                 style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.05rem", lineHeight: 1.7 }}
               >
-                We partner with companies across Germany to deliver custom financial
-                literacy workshops for their international employees — from relocation
-                basics to investment strategy.
+                {t("events.corporate.subtitle")}
               </p>
               <ul className="space-y-3 mb-8">
-                {[
-                  "Custom workshop design for your team",
-                  "English-language delivery",
-                  "HR onboarding integration",
-                  "Follow-up 1:1 consultations",
-                  "Branded financial resource kits",
-                ].map((item) => (
+                {corporateFeatures.map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <div
                       className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
@@ -378,7 +377,7 @@ export function Events() {
                   fontWeight: 700,
                 }}
               >
-                Inquire About Partnership <ArrowRight size={16} />
+                {t("events.corporate.cta")} <ArrowRight size={16} />
               </Link>
             </div>
 
@@ -388,7 +387,7 @@ export function Events() {
                 className="text-sm mb-6"
                 style={{ color: "rgba(255,255,255,0.4)", fontWeight: 600, letterSpacing: "0.06em" }}
               >
-                COMMUNITY PARTNERS & COLLABORATIONS
+                {t("events.partners.label")}
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {partners.map((p) => (
@@ -422,40 +421,17 @@ export function Events() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 style={{ color: "#0B1F3A", fontWeight: 800, fontSize: "1.6rem" }}>
-              Our Financial Literacy Mission
+              {t("events.mission.heading")}
             </h2>
             <p
               className="mt-4 max-w-xl mx-auto"
               style={{ color: "#64748B", lineHeight: 1.7 }}
             >
-              We believe every expat deserves access to clear, honest financial
-              education — not just the wealthy few.
+              {t("events.mission.subtitle")}
             </p>
           </div>
           <div className="grid sm:grid-cols-3 gap-6">
-            {[
-              {
-                icon: "🎓",
-                title: "Expat Workshops",
-                desc: "Monthly hands-on workshops in Berlin, Munich, Frankfurt, and Hamburg — plus online for the rest of Germany.",
-                stat: "24 workshops / year",
-                color: "#00D4AA",
-              },
-              {
-                icon: "📺",
-                title: "Financial Literacy Events",
-                desc: "Free online webinars covering everything from ETF basics to advanced tax strategies. Recordings always available.",
-                stat: "50+ hours of free content",
-                color: "#60A5FA",
-              },
-              {
-                icon: "🤝",
-                title: "Community Support",
-                desc: "Join our WhatsApp community of 3,000+ expats sharing tips, recommendations, and experiences about financial life in Germany.",
-                stat: "3,000+ active members",
-                color: "#A78BFA",
-              },
-            ].map((item) => (
+            {missionCards.map((item) => (
               <div
                 key={item.title}
                 className="rounded-2xl p-7 text-center"

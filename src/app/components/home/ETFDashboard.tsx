@@ -158,7 +158,7 @@ export function ETFDashboard() {
                   fontWeight: view === v ? 700 : 400,
                 }}
               >
-                {v === "beginner" ? "🌱 Beginner" : "📊 Advanced"}
+                {v === "beginner" ? t("etf.beginner") : t("etf.advanced")}
               </button>
             ))}
           </div>

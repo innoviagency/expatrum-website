@@ -134,7 +134,7 @@ export default function Careers() {
               e.currentTarget.style.boxShadow = "none";
             }}
           >
-            Apply Now
+            {t("careers.applyNow")}
           </Link>
         </div>
 

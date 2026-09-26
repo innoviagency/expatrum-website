@@ -10,62 +10,62 @@ import {
 } from "lucide-react";
 import { useLang } from "../../context/LanguageContext";
 
-const steps = [
-  {
-    id: 1,
-    icon: Plane,
-    color: "#60A5FA",
-    bgColor: "rgba(96,165,250,0.12)",
-    label: "Arrival Setup",
-    sublabel: "Month 1–2",
-    items: ["Public or private health insurance", "City registration (Anmeldung)", "Tax ID (Steueridentifikationsnummer)", "Bank account setup"],
-    outcome: "Legally settled & insured",
-  },
-  {
-    id: 2,
-    icon: Shield,
-    color: "#A78BFA",
-    bgColor: "rgba(167,139,250,0.12)",
-    label: "Protection",
-    sublabel: "Month 2–4",
-    items: ["Haftpflichtversicherung (liability)", "Berufsunfähigkeitsversicherung (BU)", "Hausrat (contents) insurance", "Legal protection (Rechtsschutz)"],
-    outcome: "Fully protected against life's risks",
-  },
-  {
-    id: 3,
-    icon: PiggyBank,
-    color: "#34D399",
-    bgColor: "rgba(52,211,153,0.12)",
-    label: "Wealth Foundation",
-    sublabel: "Month 3–6",
-    items: ["3–6 month emergency fund", "Tax optimization strategy", "German tax return filing", "Optimize Steuerklasse"],
-    outcome: "Solid financial base established",
-  },
-  {
-    id: 4,
-    icon: TrendingUp,
-    color: "#00D4AA",
-    bgColor: "rgba(0,212,170,0.12)",
-    label: "Investment Strategy",
-    sublabel: "Month 6–12",
-    items: ["ETF portfolio setup (e.g. MSCI World)", "Monthly savings plan (Sparplan)", "Risk profile assessment", "Broker account optimization"],
-    outcome: "Long-term wealth building starts",
-  },
-  {
-    id: 5,
-    icon: Sunset,
-    color: "#F59E0B",
-    bgColor: "rgba(245,158,11,0.12)",
-    label: "Retirement Planning",
-    sublabel: "Ongoing",
-    items: ["Altersvorsorge strategy", "Riester / Rürup evaluation", "State pension (Rentenversicherung)", "Private retirement supplements"],
-    outcome: "Secure future — designed today",
-  },
-];
-
 export function FinancialRoadmap() {
   const { t } = useLang();
   const [expandedStep, setExpandedStep] = useState<number | null>(1);
+
+  const steps = [
+    {
+      id: 1,
+      icon: Plane,
+      color: "#60A5FA",
+      bgColor: "rgba(96,165,250,0.12)",
+      label: t("roadmap.s1.label"),
+      sublabel: t("roadmap.s1.sublabel"),
+      items: [t("roadmap.s1.i1"), t("roadmap.s1.i2"), t("roadmap.s1.i3"), t("roadmap.s1.i4")],
+      outcome: t("roadmap.s1.outcome"),
+    },
+    {
+      id: 2,
+      icon: Shield,
+      color: "#A78BFA",
+      bgColor: "rgba(167,139,250,0.12)",
+      label: t("roadmap.s2.label"),
+      sublabel: t("roadmap.s2.sublabel"),
+      items: [t("roadmap.s2.i1"), t("roadmap.s2.i2"), t("roadmap.s2.i3"), t("roadmap.s2.i4")],
+      outcome: t("roadmap.s2.outcome"),
+    },
+    {
+      id: 3,
+      icon: PiggyBank,
+      color: "#34D399",
+      bgColor: "rgba(52,211,153,0.12)",
+      label: t("roadmap.s3.label"),
+      sublabel: t("roadmap.s3.sublabel"),
+      items: [t("roadmap.s3.i1"), t("roadmap.s3.i2"), t("roadmap.s3.i3"), t("roadmap.s3.i4")],
+      outcome: t("roadmap.s3.outcome"),
+    },
+    {
+      id: 4,
+      icon: TrendingUp,
+      color: "#00D4AA",
+      bgColor: "rgba(0,212,170,0.12)",
+      label: t("roadmap.s4.label"),
+      sublabel: t("roadmap.s4.sublabel"),
+      items: [t("roadmap.s4.i1"), t("roadmap.s4.i2"), t("roadmap.s4.i3"), t("roadmap.s4.i4")],
+      outcome: t("roadmap.s4.outcome"),
+    },
+    {
+      id: 5,
+      icon: Sunset,
+      color: "#F59E0B",
+      bgColor: "rgba(245,158,11,0.12)",
+      label: t("roadmap.s5.label"),
+      sublabel: t("roadmap.s5.sublabel"),
+      items: [t("roadmap.s5.i1"), t("roadmap.s5.i2"), t("roadmap.s5.i3"), t("roadmap.s5.i4")],
+      outcome: t("roadmap.s5.outcome"),
+    },
+  ];
 
   const toggleStep = (stepId: number) => {
     setExpandedStep((prev) => (prev === stepId ? null : stepId));
@@ -81,7 +81,7 @@ export function FinancialRoadmap() {
             style={{ backgroundColor: "rgba(0,212,170,0.1)", border: "1px solid rgba(0,212,170,0.2)" }}
           >
             <span className="text-xs" style={{ color: "#00D4AA", fontWeight: 600 }}>
-              Step-by-Step Framework
+              {t("roadmap.badge")}
             </span>
           </div>
           <h2
@@ -121,7 +121,7 @@ export function FinancialRoadmap() {
               >
                 {/* Step Header - Always Visible */}
                 <button
-                  onClick={(e) => {
+                  onClick={() => {
                     toggleStep(step.id);
                     setTimeout(() => {
                       const element = document.getElementById(`step-${step.id}`);
@@ -153,7 +153,7 @@ export function FinancialRoadmap() {
                           fontWeight: 700,
                         }}
                       >
-                        Step {step.id}: {step.label}
+                        {t("roadmap.step")} {step.id}: {step.label}
                       </div>
                       <div
                         className="text-sm mt-0.5"
@@ -213,7 +213,7 @@ export function FinancialRoadmap() {
                       />
                       <div>
                         <div className="text-xs mb-0.5" style={{ color: step.color, fontWeight: 700 }}>
-                          OUTCOME
+                          {t("roadmap.outcome")}
                         </div>
                         <div style={{ color: "#0B1F3A", fontWeight: 600, fontSize: "0.95rem" }}>
                           {step.outcome}

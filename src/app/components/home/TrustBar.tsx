@@ -1,53 +1,55 @@
 import { Star } from "lucide-react";
 import { useEffect, useRef } from "react";
-
-const testimonials = [
-  {
-    name: "Noor",
-    role: "Hausarzt",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-    text: "Loved them, transparent in choosing dates. They actually told me to keep my old policy because mine was good. Nice!",
-    rating: 4,
-  },
-  {
-    name: "Mazen B.",
-    role: "Radiologe, Frankfurt",
-    avatar: "https://images.unsplash.com/photo-1610920578961-f5bc18f2d9c5?w=100&h=100&fit=crop",
-    text: "Switched my private health insurance with their help. Better coverage, lower premium, zero hassle!",
-    rating: 5,
-  },
-  {
-    name: "Aisha K.",
-    role: "Nutritionist, Berlin",
-    avatar: "https://images.unsplash.com/photo-1587012964352-217d04a0cdce?w=100&h=100&fit=crop",
-    text: "It's a maze over the tax stuff. They took a clear yearly plan. SAVED.",
-    rating: 4,
-  },
-  {
-    name: "Priya S.",
-    role: "Data Scientist, Munich",
-    avatar: "https://images.unsplash.com/photo-1594089426440-ab4513b4d0d0?w=100&h=100&fit=crop",
-    text: "Finally someone explained BU insurance in a way that made sense. Got full coverage in 2 weeks.",
-    rating: 5,
-  },
-  {
-    name: "Taim O.",
-    role: "Marketing Lead, Hamburg",
-    avatar: "https://images.unsplash.com/photo-1561521693-a40d8da40900?w=100&h=100&fit=crop",
-    text: "My tax refund increased by €4,100 after following Expatrum's strategy. Incredible.",
-    rating: 5,
-  },
-  {
-    name: "Mei L.",
-    role: "Research Scientist, Frankfurt",
-    avatar: "https://images.unsplash.com/photo-1662643815709-7963b1a25511?w=100&h=100&fit=crop",
-    text: "The roadmap approach made everything so clear. I finally have a plan I feel confident in.",
-    rating: 5,
-  },
-];
+import { useLang } from "../../context/LanguageContext";
 
 export function TrustBar() {
+  const { t } = useLang();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const testimonials = [
+    {
+      name: t("testimonial.1.name"),
+      role: t("testimonial.1.role"),
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      text: t("testimonial.1.text"),
+      rating: 4,
+    },
+    {
+      name: t("testimonial.2.name"),
+      role: t("testimonial.2.role"),
+      avatar: "https://images.unsplash.com/photo-1610920578961-f5bc18f2d9c5?w=100&h=100&fit=crop",
+      text: t("testimonial.2.text"),
+      rating: 5,
+    },
+    {
+      name: t("testimonial.3.name"),
+      role: t("testimonial.3.role"),
+      avatar: "https://images.unsplash.com/photo-1587012964352-217d04a0cdce?w=100&h=100&fit=crop",
+      text: t("testimonial.3.text"),
+      rating: 4,
+    },
+    {
+      name: t("testimonial.4.name"),
+      role: t("testimonial.4.role"),
+      avatar: "https://images.unsplash.com/photo-1594089426440-ab4513b4d0d0?w=100&h=100&fit=crop",
+      text: t("testimonial.4.text"),
+      rating: 5,
+    },
+    {
+      name: t("testimonial.5.name"),
+      role: t("testimonial.5.role"),
+      avatar: "https://images.unsplash.com/photo-1561521693-a40d8da40900?w=100&h=100&fit=crop",
+      text: t("testimonial.5.text"),
+      rating: 5,
+    },
+    {
+      name: t("testimonial.6.name"),
+      role: t("testimonial.6.role"),
+      avatar: "https://images.unsplash.com/photo-1662643815709-7963b1a25511?w=100&h=100&fit=crop",
+      text: t("testimonial.6.text"),
+      rating: 5,
+    },
+  ];
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
@@ -87,7 +89,7 @@ export function TrustBar() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <p className="text-xs mb-2" style={{ color: "rgba(255,255,255,0.6)" }}>
-              ★ What clients say
+              {t("trust.whatClients")}
             </p>
             <h2
               style={{
@@ -96,7 +98,7 @@ export function TrustBar() {
                 fontWeight: 700,
               }}
             >
-              Loved by expats across Germany
+              {t("trust.heading")}
             </h2>
           </div>
           <div className="text-right">
@@ -111,7 +113,7 @@ export function TrustBar() {
               </div>
             </div>
             <p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>
-              Based on {totalReviews} reviews
+              {t("trust.basedOn").replace("{n}", String(totalReviews))}
             </p>
           </div>
         </div>
@@ -125,8 +127,7 @@ export function TrustBar() {
             WebkitOverflowScrolling: "touch",
           }}
         >
-          {/* Duplicate testimonials for infinite scroll effect */}
-          {[...testimonials, ...testimonials].map((t, index) => {
+          {[...testimonials, ...testimonials].map((testimonial, index) => {
             const uniqueKey = `testimonial-${index}`;
             return (
               <div
@@ -139,45 +140,45 @@ export function TrustBar() {
                   backdropFilter: "blur(10px)",
                 }}
               >
-              {/* Profile */}
-              <div className="flex items-center gap-3 mb-4">
-                <img
-                  src={t.avatar}
-                  alt={t.name}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-                <div className="flex-1">
-                  <div style={{ color: "#fff", fontWeight: 600, fontSize: "0.9rem" }}>
-                    {t.name}
-                  </div>
-                  <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem" }}>
-                    {t.role}
+                {/* Profile */}
+                <div className="flex items-center gap-3 mb-4">
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div className="flex-1">
+                    <div style={{ color: "#fff", fontWeight: 600, fontSize: "0.9rem" }}>
+                      {testimonial.name}
+                    </div>
+                    <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem" }}>
+                      {testimonial.role}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Rating */}
-              <div className="flex gap-0.5 mb-3">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={`${uniqueKey}-star-${i}`}
-                    size={14}
-                    fill={i < t.rating ? "#F59E0B" : "transparent"}
-                    style={{ color: i < t.rating ? "#F59E0B" : "rgba(255,255,255,0.2)" }}
-                  />
-                ))}
-              </div>
+                {/* Rating */}
+                <div className="flex gap-0.5 mb-3">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={`${uniqueKey}-star-${i}`}
+                      size={14}
+                      fill={i < testimonial.rating ? "#F59E0B" : "transparent"}
+                      style={{ color: i < testimonial.rating ? "#F59E0B" : "rgba(255,255,255,0.2)" }}
+                    />
+                  ))}
+                </div>
 
-              {/* Review Text */}
-              <p
-                className="text-sm"
-                style={{
-                  color: "rgba(255,255,255,0.8)",
-                  lineHeight: 1.6,
-                }}
-              >
-                "{t.text}"
-              </p>
+                {/* Review Text */}
+                <p
+                  className="text-sm"
+                  style={{
+                    color: "rgba(255,255,255,0.8)",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  "{testimonial.text}"
+                </p>
               </div>
             );
           })}

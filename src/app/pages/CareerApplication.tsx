@@ -48,30 +48,30 @@ export default function CareerApplication() {
   });
 
   const positions = [
-    "Financial Consultant",
-    "Insurance Advisor",
-    "Customer Success Manager",
-    "Marketing Manager",
-    "Product Designer",
-    "Software Engineer",
-    "Sales Representative",
-    "Operations Manager",
-    "Content Writer",
-    "Data Analyst",
+    t("careerApp.pos.1"),
+    t("careerApp.pos.2"),
+    t("careerApp.pos.3"),
+    t("careerApp.pos.4"),
+    t("careerApp.pos.5"),
+    t("careerApp.pos.6"),
+    t("careerApp.pos.7"),
+    t("careerApp.pos.8"),
+    t("careerApp.pos.9"),
+    t("careerApp.pos.10"),
   ];
 
   const expertiseAreas = [
-    "Financial Consulting",
-    "Insurance",
-    "Product Design",
-    "UX/UI",
-    "Product Management",
-    "Marketing",
-    "Sales",
-    "Customer Success",
-    "Operations",
-    "Engineering",
-    "AI / Automation",
+    t("careerApp.exp.1"),
+    t("careerApp.exp.2"),
+    t("careerApp.exp.3"),
+    t("careerApp.exp.4"),
+    t("careerApp.exp.5"),
+    t("careerApp.exp.6"),
+    t("careerApp.exp.7"),
+    t("careerApp.exp.8"),
+    t("careerApp.exp.9"),
+    t("careerApp.exp.10"),
+    t("careerApp.exp.11"),
   ];
 
   const benefits = [
@@ -175,11 +175,11 @@ export default function CareerApplication() {
       } else {
         const json = await response.json().catch(() => ({}));
         setIsSubmitting(false);
-        alert((json as any)?.error || "Submission failed. Please try again.");
+        alert((json as any)?.error || t("careerApp.errorSubmit"));
       }
     } catch {
       setIsSubmitting(false);
-      alert("Network error. Please check your connection and try again.");
+      alert(t("careerApp.errorNetwork"));
     }
   };
 
@@ -415,7 +415,7 @@ export default function CareerApplication() {
                       border: "1px solid rgba(0,0,0,0.1)",
                       color: "#0B1F3A",
                     }}
-                    placeholder="e.g., EU Citizen, Work Permit, etc."
+                    placeholder={t("careerApp.placeholder.workAuth")}
                   />
                 </div>
               </div>
@@ -459,7 +459,7 @@ export default function CareerApplication() {
                       color: "#0B1F3A",
                     }}
                   >
-                    <option value="">Select a position</option>
+                    <option value="">{t("careerApp.pos.select")}</option>
                     {positions.map(pos => (
                       <option key={pos} value={pos}>{pos}</option>
                     ))}
@@ -600,7 +600,7 @@ export default function CareerApplication() {
                       border: "1px solid rgba(0,0,0,0.1)",
                       color: "#0B1F3A",
                     }}
-                    placeholder="https://linkedin.com/in/..."
+                    placeholder={t("careerApp.placeholder.linkedin")}
                   />
                 </div>
 
@@ -624,7 +624,7 @@ export default function CareerApplication() {
                       border: "1px solid rgba(0,0,0,0.1)",
                       color: "#0B1F3A",
                     }}
-                    placeholder="https://yourportfolio.com"
+                    placeholder={t("careerApp.placeholder.portfolio")}
                   />
                 </div>
 
@@ -648,7 +648,7 @@ export default function CareerApplication() {
                       border: "1px solid rgba(0,0,0,0.1)",
                       color: "#0B1F3A",
                     }}
-                    placeholder="GitHub, Behance, Dribbble, etc."
+                    placeholder={t("careerApp.placeholder.other")}
                   />
                 </div>
               </div>
@@ -703,7 +703,7 @@ export default function CareerApplication() {
                             ? (formData[field as keyof typeof formData] as File).name
                             : t("careerApp.uploadFile")}
                         </p>
-                        <p style={{ color: "#64748B", fontSize: "0.75rem" }}>PDF, DOC, DOCX (max 10MB)</p>
+                        <p style={{ color: "#64748B", fontSize: "0.75rem" }}>{t("careerApp.fileInfo")}</p>
                       </div>
                     </div>
                   </div>
@@ -821,12 +821,12 @@ export default function CareerApplication() {
                         color: "#0B1F3A",
                       }}
                     >
-                      <option value="">Select type</option>
-                      <option value="full-time">Full-time</option>
-                      <option value="part-time">Part-time</option>
-                      <option value="freelance">Freelance</option>
-                      <option value="internship">Internship</option>
-                      <option value="remote">Remote</option>
+                      <option value="">{t("careerApp.emp.select")}</option>
+                      <option value="full-time">{t("careerApp.emp.fullTime")}</option>
+                      <option value="part-time">{t("careerApp.emp.partTime")}</option>
+                      <option value="freelance">{t("careerApp.emp.freelance")}</option>
+                      <option value="internship">{t("careerApp.emp.internship")}</option>
+                      <option value="remote">{t("careerApp.emp.remote")}</option>
                     </select>
                   </div>
                 </div>

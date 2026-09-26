@@ -1,147 +1,160 @@
 import { useState } from "react";
 import { TrendingUp, BookOpen, Shield, Clock, Star, ArrowRight, Tag } from "lucide-react";
 import { Link } from "react-router";
+import { useLang } from "../context/LanguageContext";
 
 const FINANCE_IMG = "https://images.unsplash.com/photo-1768055104923-a6f76e7478c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaW5hbmNpYWwlMjBwbGFubmluZyUyMGludmVzdG1lbnQlMjBjaGFydHxlbnwxfHx8fDE3NzY2MDM0MTd8MA&ixlib=rb-4.1.0&q=80&w=1080";
 const FINTECH_IMG = "https://images.unsplash.com/photo-1720135885007-454165745e21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBmaW50ZWNoJTIwYXBwJTIwZGFzaGJvYXJkJTIwZGFya3xlbnwxfHx8fDE3NzY2MDM0MTh8MA&ixlib=rb-4.1.0&q=80&w=1080";
 
-const categories = ["All", "ETFs & Investing", "Tax & Legal", "Insurance", "Expat Life"];
-
-const articles = [
-  {
-    id: 1,
-    title: "Top ETF Picks for Expats in Germany — 2026 Edition",
-    excerpt: "We compare the 10 best ETFs available to investors in Germany, ranked by performance, fees, and suitability for expats with a long investment horizon.",
-    category: "ETFs & Investing",
-    tag: "Editor's Pick",
-    tagColor: "#F59E0B",
-    readTime: "8 min",
-    date: "April 15, 2026",
-    icon: TrendingUp,
-    iconColor: "#00D4AA",
-    featured: true,
-    img: FINANCE_IMG,
-  },
-  {
-    id: 2,
-    title: "Tax Strategies Every Expat in Germany Must Know in 2026",
-    excerpt: "From Steuerklasse selection to double taxation treaties — a complete guide to minimizing your tax burden as an English-speaking expat working in Germany.",
-    category: "Tax & Legal",
-    tag: "Trending",
-    tagColor: "#EF4444",
-    readTime: "11 min",
-    date: "April 10, 2026",
-    icon: BookOpen,
-    iconColor: "#60A5FA",
-    featured: true,
-    img: FINTECH_IMG,
-  },
-  {
-    id: 3,
-    title: "BU Insurance Explained Simply: Do You Really Need It?",
-    excerpt: "Berufsunfähigkeitsversicherung is Germany's most important yet most misunderstood insurance. We break it down in plain English so you can make an informed decision.",
-    category: "Insurance",
-    tag: "Popular",
-    tagColor: "#A78BFA",
-    readTime: "6 min",
-    date: "April 5, 2026",
-    icon: Shield,
-    iconColor: "#A78BFA",
-    featured: false,
-    img: null,
-  },
-  {
-    id: 4,
-    title: "MSCI World vs S&P 500: Which ETF Is Better for Expats?",
-    excerpt: "A data-driven comparison of two of the world's most popular index ETFs, with specific context for expats building wealth from Germany.",
-    category: "ETFs & Investing",
-    tag: "Editor's Pick",
-    tagColor: "#F59E0B",
-    readTime: "9 min",
-    date: "March 28, 2026",
-    icon: TrendingUp,
-    iconColor: "#00D4AA",
-    featured: false,
-    img: null,
-  },
-  {
-    id: 5,
-    title: "How to Open a German Broker Account as a Foreign National",
-    excerpt: "Step-by-step guide to opening a Depot at Trade Republic, Scalable Capital, or Comdirect — with all the ID and documentation requirements explained.",
-    category: "ETFs & Investing",
-    tag: null,
-    tagColor: null,
-    readTime: "7 min",
-    date: "March 20, 2026",
-    icon: TrendingUp,
-    iconColor: "#00D4AA",
-    featured: false,
-    img: null,
-  },
-  {
-    id: 6,
-    title: "Haftpflicht vs Rechtsschutz: What's the Difference?",
-    excerpt: "Two insurance products that confuse almost every expat. We explain exactly what each covers, what it costs, and whether you need both.",
-    category: "Insurance",
-    tag: null,
-    tagColor: null,
-    readTime: "5 min",
-    date: "March 14, 2026",
-    icon: Shield,
-    iconColor: "#EF4444",
-    featured: false,
-    img: null,
-  },
-  {
-    id: 7,
-    title: "Riester Rente: Is It Worth It for Expats in 2026?",
-    excerpt: "Riester pensions are controversial for expats. We analyze the state subsidies, contribution limits, and portability issues so you can make an informed choice.",
-    category: "Tax & Legal",
-    tag: "Trending",
-    tagColor: "#EF4444",
-    readTime: "10 min",
-    date: "March 8, 2026",
-    icon: BookOpen,
-    iconColor: "#60A5FA",
-    featured: false,
-    img: null,
-  },
-  {
-    id: 8,
-    title: "Building an Emergency Fund in Germany: The Expat's Guide",
-    excerpt: "How much you need, where to keep it (Tagesgeldkonto vs regular savings), and how to think about it as an expat with potential repatriation plans.",
-    category: "Expat Life",
-    tag: null,
-    tagColor: null,
-    readTime: "6 min",
-    date: "March 1, 2026",
-    icon: BookOpen,
-    iconColor: "#34D399",
-    featured: false,
-    img: null,
-  },
-];
-
-const trendingTopics = [
-  "ETF Sparplan Setup",
-  "Steuerklasse III vs IV",
-  "BU Insurance Age",
-  "Trade Republic Guide",
-  "Double Tax Treaty",
-  "Riester for Expats",
-  "GKV vs PKV 2026",
-  "Freelancer Insurance",
-];
+type CategoryKey = "all" | "etf" | "tax" | "insurance" | "expat";
 
 export function Insights() {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const { t } = useLang();
+  const [activeCategory, setActiveCategory] = useState<CategoryKey>("all");
 
-  const filtered = activeCategory === "All"
+  const categories: { key: CategoryKey; label: string }[] = [
+    { key: "all", label: t("insights.catAll") },
+    { key: "etf", label: t("insights.catEtf") },
+    { key: "tax", label: t("insights.catTax") },
+    { key: "insurance", label: t("insights.catInsurance") },
+    { key: "expat", label: t("insights.catExpat") },
+  ];
+
+  const articles = [
+    {
+      id: 1,
+      title: t("insights.a1.title"),
+      excerpt: t("insights.a1.excerpt"),
+      category: "etf" as CategoryKey,
+      tag: t("insights.a1.tag"),
+      tagColor: "#F59E0B",
+      readTime: t("insights.a1.readTime"),
+      date: t("insights.a1.date"),
+      icon: TrendingUp,
+      iconColor: "#00D4AA",
+      featured: true,
+      img: FINANCE_IMG,
+    },
+    {
+      id: 2,
+      title: t("insights.a2.title"),
+      excerpt: t("insights.a2.excerpt"),
+      category: "tax" as CategoryKey,
+      tag: t("insights.a2.tag"),
+      tagColor: "#EF4444",
+      readTime: t("insights.a2.readTime"),
+      date: t("insights.a2.date"),
+      icon: BookOpen,
+      iconColor: "#60A5FA",
+      featured: true,
+      img: FINTECH_IMG,
+    },
+    {
+      id: 3,
+      title: t("insights.a3.title"),
+      excerpt: t("insights.a3.excerpt"),
+      category: "insurance" as CategoryKey,
+      tag: t("insights.a3.tag"),
+      tagColor: "#A78BFA",
+      readTime: t("insights.a3.readTime"),
+      date: t("insights.a3.date"),
+      icon: Shield,
+      iconColor: "#A78BFA",
+      featured: false,
+      img: null,
+    },
+    {
+      id: 4,
+      title: t("insights.a4.title"),
+      excerpt: t("insights.a4.excerpt"),
+      category: "tax" as CategoryKey,
+      tag: t("insights.a4.tag"),
+      tagColor: "#F59E0B",
+      readTime: t("insights.a4.readTime"),
+      date: t("insights.a4.date"),
+      icon: BookOpen,
+      iconColor: "#60A5FA",
+      featured: false,
+      img: null,
+    },
+    {
+      id: 5,
+      title: t("insights.a5.title"),
+      excerpt: t("insights.a5.excerpt"),
+      category: "etf" as CategoryKey,
+      tag: t("insights.a5.tag"),
+      tagColor: "#F59E0B",
+      readTime: t("insights.a5.readTime"),
+      date: t("insights.a5.date"),
+      icon: TrendingUp,
+      iconColor: "#00D4AA",
+      featured: false,
+      img: null,
+    },
+    {
+      id: 6,
+      title: t("insights.a6.title"),
+      excerpt: t("insights.a6.excerpt"),
+      category: "tax" as CategoryKey,
+      tag: t("insights.a6.tag"),
+      tagColor: "#EF4444",
+      readTime: t("insights.a6.readTime"),
+      date: t("insights.a6.date"),
+      icon: BookOpen,
+      iconColor: "#60A5FA",
+      featured: false,
+      img: null,
+    },
+    {
+      id: 7,
+      title: t("insights.a7.title"),
+      excerpt: t("insights.a7.excerpt"),
+      category: "insurance" as CategoryKey,
+      tag: t("insights.a7.tag"),
+      tagColor: "#A78BFA",
+      readTime: t("insights.a7.readTime"),
+      date: t("insights.a7.date"),
+      icon: Shield,
+      iconColor: "#EF4444",
+      featured: false,
+      img: null,
+    },
+    {
+      id: 8,
+      title: t("insights.a8.title"),
+      excerpt: t("insights.a8.excerpt"),
+      category: "expat" as CategoryKey,
+      tag: t("insights.a8.tag"),
+      tagColor: "#EF4444",
+      readTime: t("insights.a8.readTime"),
+      date: t("insights.a8.date"),
+      icon: BookOpen,
+      iconColor: "#34D399",
+      featured: false,
+      img: null,
+    },
+  ];
+
+  const trendingTopics = [
+    t("insights.t1"),
+    t("insights.t2"),
+    t("insights.t3"),
+    t("insights.t4"),
+    t("insights.t5"),
+    t("insights.t6"),
+    t("insights.t7"),
+    t("insights.t8"),
+  ];
+
+  const filtered = activeCategory === "all"
     ? articles
     : articles.filter((a) => a.category === activeCategory);
 
   const featured = articles.filter((a) => a.featured);
   const nonFeatured = filtered.filter((a) => !a.featured);
+
+  const catLabelFor = (cat: CategoryKey) =>
+    categories.find((c) => c.key === cat)?.label ?? cat;
 
   return (
     <div style={{ backgroundColor: "#F5F8FF" }}>
@@ -159,7 +172,7 @@ export function Insights() {
               >
                 <BookOpen size={13} style={{ color: "#00D4AA" }} />
                 <span className="text-xs" style={{ color: "#00D4AA", fontWeight: 600 }}>
-                  Expat Finance Intelligence Hub
+                  {t("insights.badge")}
                 </span>
               </div>
               <h1
@@ -170,24 +183,24 @@ export function Insights() {
                   lineHeight: 1.15,
                 }}
               >
-                Insights Hub
+                {t("insights.heading")}
               </h1>
               <p
                 className="mt-4 max-w-lg"
                 style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.05rem", lineHeight: 1.7 }}
               >
-                Plain-English guides, tax tips, investment strategies, and insurance explainers — written for expats in Germany.
+                {t("insights.subtitle")}
               </p>
             </div>
             {/* Trending topics */}
             <div className="max-w-sm">
               <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.4)", fontWeight: 600 }}>
-                TRENDING TOPICS
+                {t("insights.trending")}
               </p>
               <div className="flex flex-wrap gap-2">
-                {trendingTopics.map((t) => (
+                {trendingTopics.map((topic) => (
                   <span
-                    key={t}
+                    key={topic}
                     className="px-3 py-1.5 rounded-full text-xs cursor-pointer transition-colors"
                     style={{
                       backgroundColor: "rgba(255,255,255,0.07)",
@@ -195,7 +208,7 @@ export function Insights() {
                       border: "1px solid rgba(255,255,255,0.1)",
                     }}
                   >
-                    {t}
+                    {topic}
                   </span>
                 ))}
               </div>
@@ -210,7 +223,7 @@ export function Insights() {
           <div className="flex items-center gap-2 mb-7">
             <Star size={16} style={{ color: "#F59E0B" }} fill="#F59E0B" />
             <h2 style={{ color: "#0B1F3A", fontWeight: 800, fontSize: "1.25rem" }}>
-              Editor's Picks
+              {t("insights.editorsPicks")}
             </h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
@@ -245,7 +258,7 @@ export function Insights() {
                           fontWeight: 600,
                         }}
                       >
-                        {article.category}
+                        {catLabelFor(article.category)}
                       </span>
                       {article.tag && (
                         <span
@@ -280,7 +293,7 @@ export function Insights() {
                         <div className="flex items-center gap-1">
                           <Clock size={12} style={{ color: "#94A3B8" }} />
                           <span className="text-xs" style={{ color: "#94A3B8" }}>
-                            {article.readTime} read
+                            {article.readTime} {t("insights.read")}
                           </span>
                         </div>
                       </div>
@@ -288,7 +301,7 @@ export function Insights() {
                         className="flex items-center gap-1 text-sm transition-colors"
                         style={{ color: article.iconColor, fontWeight: 600 }}
                       >
-                        Read more <ArrowRight size={14} />
+                        {t("insights.readMore")} <ArrowRight size={14} />
                       </button>
                     </div>
                   </div>
@@ -305,25 +318,25 @@ export function Insights() {
             <div className="flex gap-2 mb-7 flex-wrap">
               {categories.map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  key={cat.key}
+                  onClick={() => setActiveCategory(cat.key)}
                   className="px-4 py-2 rounded-full text-sm transition-all"
                   style={{
                     backgroundColor:
-                      activeCategory === cat ? "#0B1F3A" : "#fff",
-                    color: activeCategory === cat ? "#fff" : "#64748B",
-                    border: `1px solid ${activeCategory === cat ? "#0B1F3A" : "rgba(0,0,0,0.08)"}`,
-                    fontWeight: activeCategory === cat ? 600 : 400,
+                      activeCategory === cat.key ? "#0B1F3A" : "#fff",
+                    color: activeCategory === cat.key ? "#fff" : "#64748B",
+                    border: `1px solid ${activeCategory === cat.key ? "#0B1F3A" : "rgba(0,0,0,0.08)"}`,
+                    fontWeight: activeCategory === cat.key ? 600 : 400,
                   }}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               ))}
             </div>
 
             {/* Article cards */}
             <div className="space-y-4">
-              {(activeCategory === "All" ? nonFeatured : filtered).map((article) => {
+              {(activeCategory === "all" ? nonFeatured : filtered).map((article) => {
                 const Icon = article.icon;
                 return (
                   <div
@@ -359,7 +372,7 @@ export function Insights() {
                             fontWeight: 600,
                           }}
                         >
-                          {article.category}
+                          {catLabelFor(article.category)}
                         </span>
                         {article.tag && (
                           <span
@@ -418,14 +431,14 @@ export function Insights() {
                 <BookOpen size={18} style={{ color: "#00D4AA" }} />
               </div>
               <h3 style={{ color: "#fff", fontWeight: 700, marginBottom: "8px" }}>
-                Weekly Finance Brief
+                {t("insights.newsletter.title")}
               </h3>
               <p className="text-sm mb-5" style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>
-                Get the week's most important expat finance news, curated for you.
+                {t("insights.newsletter.subtitle")}
               </p>
               <input
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t("insights.newsletter.placeholder")}
                 className="w-full px-4 py-3 rounded-xl mb-3 text-sm outline-none"
                 style={{
                   backgroundColor: "rgba(255,255,255,0.08)",
@@ -441,7 +454,7 @@ export function Insights() {
                   fontWeight: 700,
                 }}
               >
-                Subscribe Free →
+                {t("insights.newsletter.button")}
               </button>
             </div>
 
@@ -456,13 +469,13 @@ export function Insights() {
               <div className="flex items-center gap-2 mb-4">
                 <Tag size={15} style={{ color: "#0B1F3A" }} />
                 <h3 style={{ color: "#0B1F3A", fontWeight: 700 }}>
-                  Popular Topics
+                  {t("insights.sidebarTopics")}
                 </h3>
               </div>
               <div className="flex flex-wrap gap-2">
-                {trendingTopics.map((t) => (
+                {trendingTopics.map((topic) => (
                   <span
-                    key={t}
+                    key={topic}
                     className="px-3 py-1.5 rounded-full text-xs cursor-pointer transition-all"
                     style={{
                       backgroundColor: "#F1F5F9",
@@ -478,7 +491,7 @@ export function Insights() {
                       (e.currentTarget as HTMLSpanElement).style.color = "#374151";
                     }}
                   >
-                    {t}
+                    {topic}
                   </span>
                 ))}
               </div>
@@ -494,17 +507,17 @@ export function Insights() {
               <h3
                 style={{ color: "#0B1F3A", fontWeight: 800, fontSize: "1.05rem", marginBottom: "8px" }}
               >
-                Get Your Personal Financial Plan
+                {t("insights.sidebarCta.title")}
               </h3>
               <p className="text-sm mb-5" style={{ color: "rgba(11,31,58,0.7)", lineHeight: 1.6 }}>
-                Stop reading — start doing. Book your free consultation today.
+                {t("insights.sidebarCta.subtitle")}
               </p>
               <Link
                 to="/services"
                 className="flex items-center justify-between px-4 py-3 rounded-xl transition-all"
                 style={{ backgroundColor: "#0B1F3A", color: "#fff", fontWeight: 600 }}
               >
-                Book Free Call <ArrowRight size={16} />
+                {t("insights.sidebarCta.button")} <ArrowRight size={16} />
               </Link>
             </div>
           </div>

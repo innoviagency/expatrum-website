@@ -184,7 +184,7 @@ export function PlanPath() {
               boxShadow: "0 4px 20px rgba(0,212,170,0.3)",
             }}
           >
-            Start Your Financial Journey →
+            {t("path.cta")}
           </a>
         </div>
       </div>

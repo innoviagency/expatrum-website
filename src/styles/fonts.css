@@ -1,5 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&display=swap');
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Arabic — apply Noto family globally */
+:root[lang="ar"],
+:root[lang="ar"] body,
+:root[lang="ar"] *:not([data-font-override]) {
+  font-family: 'Noto Sans Arabic', sans-serif;
+  letter-spacing: 0;
+}
+
+/* Noto Kufi Arabic for headings — gives display text a distinguished look */
+:root[lang="ar"] h1,
+:root[lang="ar"] h2,
+:root[lang="ar"] h3,
+:root[lang="ar"] h4 {
+  font-family: 'Noto Kufi Arabic', sans-serif;
+}
+
+:root[dir="rtl"] .flip-rtl {
+  transform: scaleX(-1);
 }

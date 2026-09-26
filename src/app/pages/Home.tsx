@@ -8,9 +8,11 @@ import { TrustBar } from "../components/home/TrustBar";
 import { ContactForm } from "../components/ContactForm";
 import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
+import { useLang } from "../context/LanguageContext";
 
 export function Home() {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const { t } = useLang();
 
   return (
     <div>
@@ -41,14 +43,13 @@ export function Home() {
               lineHeight: 1.2,
             }}
           >
-            Ready to Take Control of Your Financial Future?
+            {t("home.cta.title")}
           </h2>
           <p
             className="mt-5 mb-10"
             style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem", lineHeight: 1.7 }}
           >
-            Join 2,400+ expats who have built a clear, optimized financial plan
-            in Germany. Your first consultation is free.
+            {t("home.cta.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -70,7 +71,7 @@ export function Home() {
                 e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,212,170,0.35)";
               }}
             >
-              Book Free Consultation
+              {t("home.cta.button1")}
               <ArrowRight size={18} />
             </button>
             <Link
@@ -82,11 +83,11 @@ export function Home() {
                 fontWeight: 500,
               }}
             >
-              Explore Insights Hub
+              {t("home.cta.button2")}
             </Link>
           </div>
           <p className="mt-6 text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
-            No commitment · No upfront cost · Transparent guidance
+            {t("home.cta.trust")}
           </p>
         </div>
       </section>

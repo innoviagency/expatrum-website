@@ -4,29 +4,17 @@ import { useLang } from "../../context/LanguageContext";
 const DOCTOR_IMG =
   "https://images.unsplash.com/photo-1758691463582-11aea602cd4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBkb2N0b3IlMjBtYWxlJTIwcG9ydHJhaXQlMjBjb25maWRlbnR8ZW58MXx8fHwxNzc3MDMyNTQ2fDA&ixlib=rb-4.1.0&q=80&w=1080";
 
-const problems = [
-  "Overpaying €6,200/year in taxes",
-  "No retirement strategy",
-  "No BU (disability) coverage",
-  "Unoptimized savings — low-yield account",
-];
-
-const solutions = [
-  "Tax optimization via Riester + deductions",
-  "ETF portfolio (MSCI World + EM split)",
-  "BU + Haftpflicht insurance bundle",
-  "Monthly Sparplan: €800/month",
-];
-
-const results = [
-  { label: "Saved annually in taxes", value: "€6,200", icon: Euro, color: "#00D4AA" },
-  { label: "Projected 10-yr portfolio", value: "€142k", icon: TrendingUp, color: "#60A5FA" },
-  { label: "Total insurance covered", value: "€2M+", icon: CheckCircle2, color: "#A78BFA" },
-  { label: "Time to implement", value: "6 weeks", icon: CheckCircle2, color: "#F59E0B" },
-];
-
 export function CaseStudy() {
   const { t } = useLang();
+
+  const problems = [t("case.p1"), t("case.p2"), t("case.p3"), t("case.p4")];
+  const solutions = [t("case.s1"), t("case.s2"), t("case.s3"), t("case.s4")];
+  const results = [
+    { label: t("case.r1"), value: "€6,200", icon: Euro, color: "#00D4AA" },
+    { label: t("case.r2"), value: "€142k", icon: TrendingUp, color: "#60A5FA" },
+    { label: t("case.r3"), value: "€2M+", icon: CheckCircle2, color: "#A78BFA" },
+    { label: t("case.r4"), value: "6 weeks", icon: CheckCircle2, color: "#F59E0B" },
+  ];
 
   return (
     <section className="py-24" style={{ backgroundColor: "#F5F8FF" }}>
@@ -38,7 +26,7 @@ export function CaseStudy() {
             style={{ backgroundColor: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.25)" }}
           >
             <span className="text-xs" style={{ color: "#A78BFA", fontWeight: 600 }}>
-              Client Success Story
+              {t("case.badge")}
             </span>
           </div>
           <h2
@@ -77,8 +65,8 @@ export function CaseStudy() {
                 style={{ background: "linear-gradient(to top, rgba(11,31,58,0.8) 0%, transparent 60%)" }}
               />
               <div className="absolute bottom-4 left-4">
-                <div style={{ color: "#fff", fontWeight: 800, fontSize: "1.1rem" }}>Ahmed K.</div>
-                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.85rem" }}>Cardiologist · Berlin</div>
+                <div style={{ color: "#fff", fontWeight: 800, fontSize: "1.1rem" }}>{t("case.name")}</div>
+                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.85rem" }}>{t("case.role")}</div>
               </div>
             </div>
             <div className="p-5">
@@ -86,14 +74,14 @@ export function CaseStudy() {
                 className="text-sm px-3 py-2 rounded-lg mb-4"
                 style={{ backgroundColor: "#F0FFF4", color: "#065F46" }}
               >
-                💬 <em>"Expatrum gave me a plan I actually understood — and could act on."</em>
+                💬 <em>"{t("case.quote")}"</em>
               </div>
               <div className="space-y-2">
                 {[
-                  { k: "Origin", v: "Egypt" },
-                  { k: "Income", v: "€95,000/year" },
-                  { k: "In Germany", v: "3 years" },
-                  { k: "Family", v: "Married, 1 child" },
+                  { k: t("case.kOrigin"), v: t("case.vOrigin") },
+                  { k: t("case.kIncome"), v: t("case.vIncome") },
+                  { k: t("case.kDuration"), v: t("case.vDuration") },
+                  { k: t("case.kFamily"), v: t("case.vFamily") },
                 ].map(({ k, v }) => (
                   <div key={k} className="flex justify-between text-sm">
                     <span style={{ color: "#94A3B8" }}>{k}</span>
@@ -123,12 +111,12 @@ export function CaseStudy() {
                   <AlertTriangle size={18} style={{ color: "#EF4444" }} />
                 </div>
                 <div>
-                  <div style={{ color: "#EF4444", fontWeight: 700, fontSize: "0.85rem" }}>BEFORE</div>
-                  <div style={{ color: "#0B1F3A", fontWeight: 600 }}>Ahmed's Situation</div>
+                  <div style={{ color: "#EF4444", fontWeight: 700, fontSize: "0.85rem" }}>{t("case.beforeLabel")}</div>
+                  <div style={{ color: "#0B1F3A", fontWeight: 600 }}>{t("case.beforeTitle")}</div>
                 </div>
               </div>
               <p className="text-sm mb-5" style={{ color: "#64748B", lineHeight: 1.6 }}>
-                Moved to Germany with a high income but <strong>no structured financial plan.</strong> Filing taxes manually, no insurance review, and savings sitting in a regular account.
+                {t("case.beforeDesc")}
               </p>
               <ul className="space-y-2.5">
                 {problems.map((p) => (
@@ -159,12 +147,12 @@ export function CaseStudy() {
                   <CheckCircle2 size={18} style={{ color: "#00D4AA" }} />
                 </div>
                 <div>
-                  <div style={{ color: "#00D4AA", fontWeight: 700, fontSize: "0.85rem" }}>AFTER</div>
-                  <div style={{ color: "#0B1F3A", fontWeight: 600 }}>6 Months Later</div>
+                  <div style={{ color: "#00D4AA", fontWeight: 700, fontSize: "0.85rem" }}>{t("case.afterLabel")}</div>
+                  <div style={{ color: "#0B1F3A", fontWeight: 600 }}>{t("case.afterTitle")}</div>
                 </div>
               </div>
               <p className="text-sm mb-5" style={{ color: "#64748B", lineHeight: 1.6 }}>
-                A <strong>complete financial system</strong> tailored to his expat situation — optimized, protected, and growing on autopilot.
+                {t("case.afterDesc")}
               </p>
               <ul className="space-y-2.5">
                 {solutions.map((s) => (
@@ -210,7 +198,7 @@ export function CaseStudy() {
 
         <div className="text-center mt-10">
           <p className="text-sm mb-4" style={{ color: "#94A3B8" }}>
-            Your results will depend on your unique situation.
+            {t("case.disclaimer")}
           </p>
           <a
             href="/services"
@@ -221,7 +209,7 @@ export function CaseStudy() {
               fontWeight: 600,
             }}
           >
-            Get Your Personal Story Started →
+            {t("case.cta")}
           </a>
         </div>
       </div>

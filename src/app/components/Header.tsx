@@ -1,14 +1,118 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useLang } from "../context/LanguageContext";
 import type { Language } from "../context/LanguageContext";
 import svgPaths from "../../imports/svg-bwyjzvc88u";
 
-export function Header() {
+const LANGS: { code: Language; flag: string; label: string }[] = [
+  { code: "en", flag: "🇬🇧", label: "EN" },
+  { code: "de", flag: "🇩🇪", label: "DE" },
+  { code: "ar", flag: "🇸🇦", label: "AR" },
+];
+
+function LangDropdown({ mobile = false }: { mobile?: boolean }) {
+  const { lang, setLang } = useLang();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const current = LANGS.find((l) => l.code === lang)!;
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  if (mobile) {
+    return (
+      <div className="flex gap-2 pt-2">
+        {LANGS.map((l) => (
+          <button
+            key={l.code}
+            onClick={() => setLang(l.code)}
+            className="flex-1 py-2 rounded-lg text-xs flex items-center justify-center gap-1.5"
+            style={{
+              backgroundColor: lang === l.code ? "#00D4AA" : "rgba(255,255,255,0.05)",
+              color: lang === l.code ? "#0B1F3A" : "rgba(255,255,255,0.7)",
+              fontWeight: lang === l.code ? 700 : 400,
+              fontFamily: l.code === "ar" ? "'Noto Sans Arabic', sans-serif" : "inherit",
+            }}
+          >
+            <span>{l.flag}</span>
+            <span>{l.label}</span>
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-colors"
+        style={{
+          border: "1px solid rgba(255,255,255,0.15)",
+          color: "rgba(255,255,255,0.9)",
+          backgroundColor: open ? "rgba(255,255,255,0.08)" : "transparent",
+          fontFamily: lang === "ar" ? "'Noto Sans Arabic', sans-serif" : "inherit",
+        }}
+      >
+        <span>{current.flag}</span>
+        <span style={{ fontWeight: 600 }}>{current.label}</span>
+        <ChevronDown
+          size={12}
+          style={{
+            opacity: 0.7,
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.2s",
+          }}
+        />
+      </button>
+
+      {open && (
+        <div
+          className="absolute top-full mt-1 right-0 rounded-xl overflow-hidden shadow-2xl z-50 min-w-[110px]"
+          style={{
+            backgroundColor: "#0D2544",
+            border: "1px solid rgba(255,255,255,0.12)",
+          }}
+        >
+          {LANGS.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => { setLang(l.code); setOpen(false); }}
+              className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-left transition-colors"
+              style={{
+                color: lang === l.code ? "#00D4AA" : "rgba(255,255,255,0.8)",
+                backgroundColor: lang === l.code ? "rgba(0,212,170,0.08)" : "transparent",
+                fontWeight: lang === l.code ? 700 : 400,
+                fontFamily: l.code === "ar" ? "'Noto Sans Arabic', sans-serif" : "inherit",
+              }}
+              onMouseEnter={(e) => { if (lang !== l.code) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)"; }}
+              onMouseLeave={(e) => { if (lang !== l.code) e.currentTarget.style.backgroundColor = "transparent"; }}
+            >
+              <span style={{ fontSize: "1rem" }}>{l.flag}</span>
+              <span>{l.code === "en" ? "English" : l.code === "de" ? "Deutsch" : "العربية"}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface HeaderProps {
+  onOpenContact: () => void;
+}
+
+export function Header({ onOpenContact }: HeaderProps) {
   const { lang, setLang, t } = useLang();
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const headerRef = useRef<HTMLElement>(null);
 
   const navLinks = [
     { label: t("nav.home"), to: "/" },
@@ -21,38 +125,53 @@ export function Header() {
   const isActive = (to: string) =>
     to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
 
+  // Close mobile menu when clicking outside the header
+  useEffect(() => {
+    const handler = (e: MouseEvent | TouchEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   return (
     <header
+      ref={headerRef}
+      dir="ltr"
       className="fixed top-0 left-0 right-0 z-50"
       style={{ backgroundColor: "#0B1F3A" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div
-              className="bg-[#00d4aa] rounded-[10px] w-8 h-8 flex items-center justify-center"
-            >
-              <svg className="w-[23px] h-[22px]" fill="none" viewBox="0 0 23 22">
-                <g clipPath="url(#clip0_49_1451)">
-                  <path d={svgPaths.p8df1260} stroke="#0B1F3A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  <path d={svgPaths.p3d1c4a40} stroke="#0B1F3A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  <path d={svgPaths.p1b66b1c0} stroke="#0B1F3A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  <path d={svgPaths.p231fe880} stroke="#0B1F3A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                </g>
-                <defs>
-                  <clipPath id="clip0_49_1451">
-                    <rect fill="white" height="22" width="23" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </div>
-            <span
-              className="text-white tracking-tight"
-              style={{ fontWeight: 700, fontSize: "1.2rem" }}
-            >
-              Expat<span style={{ color: "#00D4AA" }}>rum</span>
-            </span>
+          <Link to="/" className="flex items-center">
+            <svg width="125" height="32" viewBox="0 0 125 32" fill="none">
+              <path d="M93 10C93 4.47716 97.4772 0 103 0H114.993C120.516 0 124.993 4.47715 124.993 10V21.9931C124.993 27.516 120.516 31.9931 114.993 31.9931H103C97.4772 31.9931 93 27.516 93 21.9931V10Z" fill="#00D4AA"/>
+              <g clipPath="url(#clip0_260_41_hdr)">
+                <path d="M100.411 21.9992L109.438 12.1474L111.651 14.2253L116.911 8.49921" stroke="#0B1F3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M111.52 18.0497L104.911 18.0497" stroke="#0B1F3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M111.52 22.0497L100.911 22.0497" stroke="#0B1F3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M112.103 7.99921H117.215V13.4992" stroke="#0B1F3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+              <path d="M1.4 30.86C1.16 29.9267 0.953333 29.0533 0.78 28.24C0.62 27.44 0.5 26.7133 0.42 26.06C0.34 25.42 0.3 24.8733 0.3 24.42C0.3 23.4867 0.453333 22.7067 0.76 22.08C1.08 21.4533 1.5 20.9533 2.02 20.58C2.55333 20.1933 3.13333 19.92 3.76 19.76C4.38667 19.5867 5.01333 19.5 5.64 19.5C6.28 19.5 6.86667 19.5533 7.4 19.66C7.42667 19.2467 7.39333 18.8733 7.3 18.54C7.22 18.2067 7.09333 17.92 6.92 17.68C6.76 17.44 6.56 17.2533 6.32 17.12C6.09333 16.9867 5.84667 16.92 5.58 16.92C5.32667 16.92 5.07333 16.9867 4.82 17.12C4.56667 17.24 4.32667 17.42 4.1 17.66C3.88667 17.9 3.68 18.2067 3.48 18.58L1.3 17.38C1.66 16.5667 2.08667 15.9267 2.58 15.46C3.07333 14.98 3.58667 14.64 4.12 14.44C4.66667 14.2267 5.2 14.12 5.72 14.12C6.52 14.12 7.20667 14.2933 7.78 14.64C8.36667 14.9733 8.84 15.4133 9.2 15.96C9.56 16.4933 9.82667 17.0667 10 17.68C10.1733 18.2933 10.26 18.88 10.26 19.44C10.26 19.8667 10.2133 20.2933 10.12 20.72C10.04 21.1333 9.94 21.5067 9.82 21.84C9.71333 22.1733 9.60667 22.4333 9.5 22.62C8.76667 22.42 8.07333 22.2733 7.42 22.18C6.76667 22.0867 6.17333 22.06 5.64 22.1C5.12 22.1267 4.66667 22.2333 4.28 22.42C3.90667 22.5933 3.61333 22.8533 3.4 23.2C3.2 23.5467 3.1 23.9867 3.1 24.52C3.1 25.0133 3.14 25.5733 3.22 26.2C3.3 26.84 3.41333 27.5 3.56 28.18C3.70667 28.86 3.87333 29.5333 4.06 30.2L1.4 30.86ZM12.097 27.6L11.517 24.8C12.4637 24.68 13.2904 24.5333 13.997 24.36C14.7037 24.2 15.297 23.9733 15.777 23.68C16.257 23.3867 16.617 22.9867 16.857 22.48C17.097 21.96 17.217 21.2933 17.217 20.48C17.217 20.1867 17.1904 19.8933 17.137 19.6C17.0837 19.2933 17.0037 19.0133 16.897 18.76C16.7904 18.5067 16.6504 18.3 16.477 18.14C16.317 17.98 16.1237 17.9 15.897 17.9C15.657 17.9 15.4437 17.9867 15.257 18.16C15.0704 18.32 14.9237 18.5267 14.817 18.78C14.7104 19.02 14.657 19.2667 14.657 19.52C14.657 19.7067 14.7037 19.8667 14.797 20C14.8904 20.12 15.0304 20.2133 15.217 20.28C15.4037 20.3333 15.637 20.36 15.917 20.36C16.237 20.36 16.5637 20.3267 16.897 20.26C17.2437 20.18 17.557 20.0733 17.837 19.94L17.917 22.12C17.597 22.3733 17.2304 22.6 16.817 22.8C16.4037 22.9867 15.9037 23.08 15.317 23.08C14.837 23.08 14.3904 23.0267 13.977 22.92C13.5637 22.8 13.197 22.62 12.877 22.38C12.5704 22.14 12.3304 21.8333 12.157 21.46C11.9837 21.0733 11.897 20.6133 11.897 20.08C11.897 19.4267 12.0037 18.7933 12.217 18.18C12.4304 17.5667 12.7237 17.02 13.097 16.54C13.4837 16.0467 13.9237 15.66 14.417 15.38C14.9237 15.0867 15.457 14.94 16.017 14.94C16.6837 14.94 17.2637 15.1067 17.757 15.44C18.2637 15.7733 18.6837 16.2133 19.017 16.76C19.3504 17.2933 19.6037 17.8733 19.777 18.5C19.9504 19.1267 20.037 19.7267 20.037 20.3C20.037 21.8067 19.717 23.0867 19.077 24.14C18.437 25.1933 17.5237 26.0067 16.337 26.58C15.1504 27.1667 13.737 27.5067 12.097 27.6ZM21.238 27.62L20.218 25.14C20.9246 24.9 21.5713 24.62 22.158 24.3C22.758 23.98 23.278 23.6267 23.718 23.24C24.158 22.8533 24.498 22.4333 24.738 21.98C24.978 21.5133 25.098 21.0133 25.098 20.48C25.098 19.92 24.9713 19.3067 24.718 18.64C24.4646 17.9733 24.158 17.2933 23.798 16.6L26.418 15.34C26.658 15.7533 26.8646 16.2 27.038 16.68C27.2246 17.1467 27.378 17.5667 27.498 17.94C27.618 18.3133 27.698 18.5667 27.738 18.7C27.9246 19.34 28.178 19.7667 28.498 19.98C28.8313 20.1933 29.3646 20.3 30.098 20.3C30.6046 20.3 30.9646 20.4333 31.178 20.7C31.4046 20.9533 31.518 21.2733 31.518 21.66C31.518 22.0733 31.378 22.42 31.098 22.7C30.818 22.9667 30.418 23.1 29.898 23.1C29.3513 23.1 28.8713 23.02 28.458 22.86C28.0446 22.7 27.7113 22.4667 27.458 22.16C27.218 21.8533 27.0646 21.4933 26.998 21.08L27.738 21.5C27.658 22.2067 27.4246 22.8733 27.038 23.5C26.6646 24.14 26.178 24.7267 25.578 25.26C24.978 25.7933 24.3046 26.26 23.558 26.66C22.8113 27.06 22.038 27.38 21.238 27.62Z" fill="#00D4AA"/>
+              <path d="M29.9219 23.1L30.1219 20.3C30.9219 20.3 31.5352 20.26 31.9619 20.18C32.3885 20.1 32.6819 19.9533 32.8419 19.74C33.0152 19.5133 33.1019 19.1933 33.1019 18.78C33.1019 18.4067 33.0485 17.96 32.9419 17.44C32.8485 16.92 32.7219 16.38 32.5619 15.82C32.4152 15.26 32.2552 14.7467 32.0819 14.28L34.8419 13.52C35.0152 13.9733 35.1819 14.5 35.3419 15.1C35.5019 15.7 35.6352 16.32 35.7419 16.96C35.8485 17.5867 35.9019 18.1933 35.9019 18.78C35.9019 19.6867 35.7552 20.4267 35.4619 21C35.1685 21.56 34.7552 21.9933 34.2219 22.3C33.7019 22.6067 33.0752 22.82 32.3419 22.94C31.6085 23.0467 30.8019 23.1 29.9219 23.1ZM35.3419 11.9C34.9552 11.9 34.6219 11.7667 34.3419 11.5C34.0752 11.22 33.9419 10.8933 33.9419 10.52C33.9419 10.1333 34.0752 9.8 34.3419 9.52C34.6219 9.24 34.9552 9.1 35.3419 9.1C35.7152 9.1 36.0352 9.24 36.3019 9.52C36.5685 9.8 36.7019 10.1333 36.7019 10.52C36.7019 10.8933 36.5685 11.22 36.3019 11.5C36.0352 11.7667 35.7152 11.9 35.3419 11.9ZM31.8819 11.88C31.4952 11.88 31.1619 11.7467 30.8819 11.48C30.6152 11.2 30.4819 10.8733 30.4819 10.5C30.4819 10.1133 30.6152 9.78 30.8819 9.5C31.1619 9.22 31.4952 9.08 31.8819 9.08C32.2552 9.08 32.5752 9.22 32.8419 9.5C33.1085 9.78 33.2419 10.1133 33.2419 10.5C33.2419 10.8733 33.1085 11.2 32.8419 11.48C32.5752 11.7467 32.2552 11.88 31.8819 11.88ZM43.4494 23.1C42.2094 23.1 41.2494 22.9733 40.5694 22.72C39.9027 22.4667 39.436 22.0733 39.1694 21.54C38.9027 20.9933 38.7494 20.3067 38.7094 19.48L38.2894 8.36H41.0894L41.5094 18.14C41.536 18.7533 41.6027 19.2133 41.7094 19.52C41.816 19.8267 42.016 20.0333 42.3094 20.14C42.616 20.2467 43.0627 20.3 43.6494 20.3C44.156 20.3 44.516 20.4333 44.7294 20.7C44.956 20.9533 45.0694 21.2733 45.0694 21.66C45.0694 22.0733 44.9294 22.42 44.6494 22.7C44.3694 22.9667 43.9694 23.1 43.4494 23.1ZM43.4766 23.1L43.6766 20.3C44.1832 20.3 44.5832 20.2533 44.8766 20.16C45.1832 20.0667 45.4232 19.88 45.5966 19.6C45.7832 19.3067 45.9366 18.88 46.0566 18.32C46.1899 17.76 46.3232 17.0133 46.4566 16.08L49.0766 16.52C49.0499 16.72 49.0099 16.9533 48.9566 17.22C48.9166 17.4867 48.8766 17.76 48.8366 18.04C48.8099 18.3067 48.7966 18.56 48.7966 18.8C48.7966 19.12 48.8632 19.3933 48.9966 19.62C49.1432 19.8333 49.3966 20 49.7566 20.12C50.1299 20.24 50.6632 20.3 51.3566 20.3C51.8632 20.3 52.2232 20.4333 52.4366 20.7C52.6499 20.9533 52.7566 21.2733 52.7566 21.66C52.7566 22.0733 52.6166 22.42 52.3366 22.7C52.0699 22.9667 51.6766 23.1 51.1566 23.1C50.2366 23.1 49.4899 23.0133 48.9166 22.84C48.3432 22.6667 47.9166 22.3733 47.6366 21.96C47.3566 21.5467 47.1766 20.98 47.0966 20.26H48.0566C47.8166 20.9 47.5366 21.4133 47.2166 21.8C46.8966 22.1733 46.5366 22.4533 46.1366 22.64C45.7366 22.8267 45.3099 22.9467 44.8566 23C44.4166 23.0667 43.9566 23.1 43.4766 23.1ZM47.0366 27.7C46.6499 27.7 46.3166 27.5667 46.0366 27.3C45.7699 27.0333 45.6366 26.7067 45.6366 26.32C45.6366 25.9333 45.7699 25.5933 46.0366 25.3C46.3166 25.02 46.6499 24.88 47.0366 24.88C47.4232 24.88 47.7499 25.02 48.0166 25.3C48.2966 25.5933 48.4366 25.9333 48.4366 26.32C48.4366 26.7067 48.2966 27.0333 48.0166 27.3C47.7499 27.5667 47.4232 27.7 47.0366 27.7ZM51.1523 23.1L51.3523 20.3C51.7923 20.3 52.1523 20.2667 52.4323 20.2C52.7123 20.12 52.939 19.9533 53.1123 19.7C53.299 19.4333 53.459 19.04 53.5923 18.52C53.739 17.9867 53.899 17.2667 54.0723 16.36L56.6723 16.84C56.619 17.1333 56.5457 17.5 56.4523 17.94C56.3723 18.38 56.3323 18.76 56.3323 19.08C56.3323 19.3333 56.379 19.5533 56.4723 19.74C56.579 19.9133 56.7523 20.0533 56.9923 20.16C57.2457 20.2533 57.5923 20.3 58.0323 20.3C58.379 20.3 58.6723 20.2667 58.9123 20.2C59.1657 20.12 59.379 19.9533 59.5523 19.7C59.739 19.4333 59.899 19.0267 60.0323 18.48C60.179 17.92 60.319 17.1667 60.4523 16.22L63.0923 16.64C63.039 16.9467 62.9857 17.2733 62.9323 17.62C62.879 17.9667 62.8323 18.2867 62.7923 18.58C62.7523 18.8733 62.7323 19.1133 62.7323 19.3C62.7323 19.4733 62.779 19.64 62.8723 19.8C62.979 19.9467 63.1657 20.0667 63.4323 20.16C63.7123 20.2533 64.099 20.3 64.5923 20.3C65.1923 20.3 65.6323 20.1733 65.9123 19.92C66.2057 19.6533 66.3523 19.2533 66.3523 18.72C66.3523 18.4133 66.3457 18.0867 66.3323 17.74C66.319 17.38 66.2923 16.98 66.2523 16.54C66.2257 16.0867 66.1723 15.5733 66.0923 15L68.6723 14.8C68.7657 15.9467 68.8723 16.88 68.9923 17.6C69.1123 18.32 69.2723 18.88 69.4723 19.28C69.6857 19.6667 69.9657 19.9333 70.3123 20.08C70.6723 20.2267 71.139 20.3 71.7123 20.3C72.219 20.3 72.579 20.4333 72.7923 20.7C73.019 20.9533 73.1323 21.2733 73.1323 21.66C73.1323 22.0733 72.9923 22.42 72.7123 22.7C72.4457 22.9667 72.0457 23.1 71.5123 23.1C71.1523 23.1 70.779 23.0667 70.3923 23C70.0057 22.9467 69.6323 22.8333 69.2723 22.66C68.9123 22.4733 68.5923 22.2067 68.3123 21.86C68.0323 21.5133 67.8123 21.0533 67.6523 20.48L68.0123 20.6C67.8257 21.2667 67.5723 21.78 67.2523 22.14C66.9323 22.5 66.539 22.7533 66.0723 22.9C65.6057 23.0333 65.0457 23.1 64.3923 23.1C63.7923 23.1 63.259 23.02 62.7923 22.86C62.3257 22.7 61.9523 22.44 61.6723 22.08C61.4057 21.7067 61.2657 21.2067 61.2523 20.58H61.9323C61.6657 21.3267 61.359 21.88 61.0123 22.24C60.6657 22.6 60.2457 22.8333 59.7523 22.94C59.259 23.0467 58.639 23.1 57.8923 23.1C57.439 23.1 56.9923 23.0533 56.5523 22.96C56.1123 22.8533 55.719 22.62 55.3723 22.26C55.0257 21.8867 54.7723 21.3 54.6123 20.5L55.6923 20.46C55.4123 21.2467 55.0457 21.8267 54.5923 22.2C54.1523 22.5733 53.6457 22.82 53.0723 22.94C52.499 23.0467 51.859 23.1 51.1523 23.1ZM71.5234 23.1L71.7234 20.3H74.5834C74.8634 20.3 75.1101 20.2867 75.3234 20.26C75.5368 20.22 75.7101 20.16 75.8434 20.08C75.9901 20 76.0968 19.9 76.1634 19.78C76.2301 19.66 76.2634 19.52 76.2634 19.36C76.2634 19.2 76.1768 18.9467 76.0034 18.6C75.8434 18.24 75.4901 17.8067 74.9434 17.3C74.6501 17.0333 74.3301 16.7533 73.9834 16.46C73.6501 16.1533 73.3301 15.8667 73.0234 15.6C72.7168 15.32 72.4634 15.0733 72.2634 14.86C72.0634 14.6467 71.9634 14.4933 71.9634 14.4C71.9634 14.2 71.9768 13.98 72.0034 13.74C72.0301 13.5 72.0701 13.28 72.1234 13.08C72.1901 12.88 72.2768 12.7333 72.3834 12.64C72.6101 12.4267 72.9434 12.18 73.3834 11.9C73.8368 11.6067 74.3768 11.2933 75.0034 10.96C75.6301 10.6133 76.3301 10.2533 77.1034 9.88C77.8901 9.49333 78.7301 9.10667 79.6234 8.72L80.7634 11.16C80.0301 11.48 79.3368 11.7933 78.6834 12.1C78.0301 12.3933 77.4168 12.6867 76.8434 12.98C76.2834 13.26 75.7634 13.54 75.2834 13.82C74.8168 14.0867 74.4034 14.3533 74.0434 14.62L74.3034 13.14C75.4368 14.0067 76.3368 14.7867 77.0034 15.48C77.6834 16.1733 78.1901 16.7933 78.5234 17.34C78.8568 17.8733 79.0768 18.3533 79.1834 18.78C79.2901 19.1933 79.3434 19.56 79.3434 19.88C79.3434 20.2 79.2634 20.5467 79.1034 20.92C78.9568 21.28 78.6834 21.6267 78.2834 21.96C77.8968 22.2933 77.3501 22.5667 76.6434 22.78C75.9368 22.9933 75.0301 23.1 73.9234 23.1H71.5234ZM82.2055 23L81.7855 8.36H84.5855L85.0055 23H82.2055Z" fill="white"/>
+              <defs>
+                <clipPath id="clip0_260_41_hdr">
+                  <rect width="23" height="22" fill="white" transform="translate(97.4923 4.99658)"/>
+                </clipPath>
+              </defs>
+            </svg>
           </Link>
 
           {/* Desktop Nav */}
@@ -64,10 +183,9 @@ export function Header() {
                 className="px-4 py-2 rounded-md transition-colors text-sm"
                 style={{
                   color: isActive(link.to) ? "#00D4AA" : "rgba(255,255,255,0.8)",
-                  backgroundColor: isActive(link.to)
-                    ? "rgba(0,212,170,0.1)"
-                    : "transparent",
+                  backgroundColor: isActive(link.to) ? "rgba(0,212,170,0.1)" : "transparent",
                   fontWeight: isActive(link.to) ? 600 : 400,
+                  fontFamily: "inherit",
                 }}
               >
                 {link.label}
@@ -77,97 +195,125 @@ export function Header() {
 
           {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Language Toggle */}
-            <div
-              className="flex rounded-lg overflow-hidden border"
-              style={{ borderColor: "rgba(255,255,255,0.15)" }}
+            <LangDropdown />
+            <button
+              onClick={onOpenContact}
+              className="px-4 py-2 rounded-lg text-sm transition-all"
+              style={{
+                backgroundColor: "#00D4AA",
+                color: "#0B1F3A",
+                fontWeight: 600,
+                fontFamily: "inherit",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,212,170,0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
             >
-              {(["en", "de"] as Language[]).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLang(l)}
-                  className="px-3 py-1.5 text-xs transition-colors"
-                  style={{
-                    backgroundColor:
-                      lang === l ? "#00D4AA" : "transparent",
-                    color: lang === l ? "#0B1F3A" : "rgba(255,255,255,0.7)",
-                    fontWeight: lang === l ? 700 : 400,
-                  }}
-                >
-                  {l === "en" ? "🇬🇧 EN" : "🇩🇪 DE"}
-                </button>
-              ))}
-            </div>
-
-            {/* CTA */}
-            
+              {t("nav.cta")}
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-white p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-label="Toggle menu"
           >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            <div style={{ transition: "transform 0.25s ease", transform: mobileOpen ? "rotate(90deg)" : "rotate(0deg)" }}>
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </div>
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div
-          className="md:hidden border-t px-4 py-4 space-y-2"
-          style={{
-            backgroundColor: "#0B1F3A",
-            borderColor: "rgba(255,255,255,0.1)",
-          }}
-        >
+      {/* Backdrop blur overlay */}
+      <div
+        className="md:hidden fixed inset-0 top-16 z-[-1]"
+        style={{
+          backdropFilter: mobileOpen ? "blur(6px)" : "blur(0px)",
+          WebkitBackdropFilter: mobileOpen ? "blur(6px)" : "blur(0px)",
+          backgroundColor: mobileOpen ? "rgba(11,31,58,0.25)" : "rgba(11,31,58,0)",
+          opacity: mobileOpen ? 1 : 0,
+          pointerEvents: mobileOpen ? "auto" : "none",
+          transition: "backdrop-filter 0.3s ease, opacity 0.3s ease, background-color 0.3s ease",
+        }}
+        onClick={() => setMobileOpen(false)}
+      />
+
+      {/* Mobile Menu — always rendered, height-transitioned */}
+      <div
+        className="md:hidden overflow-hidden"
+        style={{
+          maxHeight: mobileOpen ? "480px" : "0px",
+          opacity: mobileOpen ? 1 : 0,
+          transition: "max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease",
+          backgroundColor: "#ffffff",
+          boxShadow: "0 8px 32px rgba(11,31,58,0.12)",
+        }}
+      >
+        <div className="px-4 py-4 space-y-1">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               onClick={() => setMobileOpen(false)}
-              className="block px-4 py-2.5 rounded-lg text-sm"
+              className="flex items-center px-4 py-2.5 rounded-xl text-sm transition-colors"
               style={{
-                color: isActive(link.to) ? "#00D4AA" : "rgba(255,255,255,0.8)",
-                backgroundColor: isActive(link.to)
-                  ? "rgba(0,212,170,0.1)"
-                  : "transparent",
+                color: isActive(link.to) ? "#00D4AA" : "#0B1F3A",
+                backgroundColor: isActive(link.to) ? "rgba(0,212,170,0.08)" : "transparent",
+                fontWeight: isActive(link.to) ? 600 : 400,
+                fontFamily: "inherit",
               }}
             >
               {link.label}
             </Link>
           ))}
-          <div className="flex gap-2 pt-2">
-            {(["en", "de"] as Language[]).map((l) => (
+
+          <div
+            className="my-3"
+            style={{ height: "1px", backgroundColor: "rgba(11,31,58,0.08)", margin: "12px 16px" }}
+          />
+
+          {/* Language switcher — light variant */}
+          <div className="flex gap-2 px-1 pb-1">
+            {LANGS.map((l) => (
               <button
-                key={l}
-                onClick={() => setLang(l)}
-                className="flex-1 py-2 rounded-lg text-xs"
+                key={l.code}
+                onClick={() => setLang(l.code)}
+                className="flex-1 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all"
                 style={{
-                  backgroundColor: lang === l ? "#00D4AA" : "rgba(255,255,255,0.05)",
-                  color: lang === l ? "#0B1F3A" : "rgba(255,255,255,0.7)",
-                  fontWeight: lang === l ? 700 : 400,
+                  backgroundColor: lang === l.code ? "#0B1F3A" : "rgba(11,31,58,0.06)",
+                  color: lang === l.code ? "#ffffff" : "#0B1F3A",
+                  fontWeight: lang === l.code ? 700 : 400,
+                  fontFamily: "inherit",
                 }}
               >
-                {l === "en" ? "🇬🇧 EN" : "🇩🇪 DE"}
+                <span>{l.flag}</span>
+                <span>{l.label}</span>
               </button>
             ))}
           </div>
-          <Link
-            to="/services"
-            onClick={() => setMobileOpen(false)}
-            className="block text-center px-4 py-3 rounded-lg text-sm"
+
+          <button
+            onClick={() => { setMobileOpen(false); onOpenContact(); }}
+            className="block w-full text-center px-4 py-3 rounded-xl text-sm mt-1 transition-all"
             style={{
               backgroundColor: "#00D4AA",
               color: "#0B1F3A",
-              fontWeight: 600,
+              fontWeight: 700,
+              fontFamily: lang === "ar" ? "'Noto Sans Arabic', sans-serif" : "inherit",
+              boxShadow: "0 4px 16px rgba(0,212,170,0.3)",
             }}
           >
             {t("nav.cta")}
-          </Link>
+          </button>
         </div>
-      )}
+      </div>
     </header>
   );
 }

@@ -135,7 +135,7 @@ export function Footer() {
             {/* Divider */}
             <div
               className="my-4"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
+              style={{ borderTopWidth: "1px", borderTopStyle: "solid", borderTopColor: "rgba(255,255,255,0.1)" }}
             />
             {/* Careers Link */}
             <Link
@@ -182,7 +182,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div
           className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ borderTopWidth: "1px", borderTopStyle: "solid", borderTopColor: "rgba(255,255,255,0.07)" }}
         >
           <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
             {t("footer.copyright")}
