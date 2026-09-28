@@ -11,142 +11,7 @@ import {
   PiggyBank,
 } from "lucide-react";
 import { Link } from "react-router";
-
-const services = [
-  {
-    icon: Heart,
-    color: "#EF4444",
-    bg: "rgba(239,68,68,0.1)",
-    title: "Health Insurance",
-    german: "Krankenversicherung",
-    roadmapStep: 1,
-    stepLabel: "Arrival Setup",
-    tagline: "Your first and most critical step in Germany.",
-    description:
-      "We compare public (GKV) and private (PKV) health insurance options based on your income, age, and employment status. Most expats overpay — we find you the right plan.",
-    features: [
-      "GKV vs PKV comparison",
-      "International coverage options",
-      "Family coverage analysis",
-      "Switching support",
-    ],
-    cta: "Get Health Coverage",
-  },
-  {
-    icon: Shield,
-    color: "#A78BFA",
-    bg: "rgba(167,139,250,0.1)",
-    title: "Liability Insurance",
-    german: "Haftpflichtversicherung",
-    roadmapStep: 2,
-    stepLabel: "Protection",
-    tagline: "Mandatory for responsible living in Germany.",
-    description:
-      "Haftpflicht is considered essential by most Germans — and for good reason. A single accident can cost millions. We find you the best coverage at the lowest rate.",
-    features: [
-      "Personal liability up to €50M",
-      "Covers accidents abroad",
-      "Pet owner liability",
-      "From €3/month",
-    ],
-    cta: "Get Protected",
-  },
-  {
-    icon: FileText,
-    color: "#F59E0B",
-    bg: "rgba(245,158,11,0.1)",
-    title: "Disability Insurance",
-    german: "Berufsunfähigkeitsversicherung",
-    roadmapStep: 2,
-    stepLabel: "Protection",
-    tagline: "Your income protection — often overlooked, always critical.",
-    description:
-      "BU insurance replaces your income if you can no longer work due to illness or injury. As an expat, your German state pension benefits may be minimal. BU fills this critical gap.",
-    features: [
-      "Income replacement up to 80%",
-      "Mental health coverage included",
-      "Inflation-proof adjustments",
-      "Customized for expat situations",
-    ],
-    cta: "Protect Your Income",
-  },
-  {
-    icon: Scale,
-    color: "#60A5FA",
-    bg: "rgba(96,165,250,0.1)",
-    title: "Legal Protection",
-    german: "Rechtsschutzversicherung",
-    roadmapStep: 2,
-    stepLabel: "Protection",
-    tagline: "Navigate German law without financial fear.",
-    description:
-      "German legal disputes — even minor ones — can cost thousands. Rechtsschutz covers legal costs for employment disputes, rental conflicts, and more. Essential for expats.",
-    features: [
-      "Employment law coverage",
-      "Tenant rights protection",
-      "Traffic law defense",
-      "Annual legal hotline access",
-    ],
-    cta: "Get Legal Cover",
-  },
-  {
-    icon: PiggyBank,
-    color: "#34D399",
-    bg: "rgba(52,211,153,0.1)",
-    title: "Tax Optimization",
-    german: "Steueroptimierung",
-    roadmapStep: 3,
-    stepLabel: "Wealth Foundation",
-    tagline: "Most expats overpay taxes by €2,000–€8,000 annually.",
-    description:
-      "From choosing the right Steuerklasse to maximizing deductible expenses, we build a tax strategy tailored for your expat situation — including cross-border considerations.",
-    features: [
-      "Steuerklasse optimization",
-      "Deductible expense review",
-      "Double taxation treaty advice",
-      "Annual tax return support",
-    ],
-    cta: "Optimize My Taxes",
-  },
-  {
-    icon: TrendingUp,
-    color: "#00D4AA",
-    bg: "rgba(0,212,170,0.1)",
-    title: "ETF Portfolio",
-    german: "ETF-Anlageportfolio",
-    roadmapStep: 4,
-    stepLabel: "Investment Strategy",
-    tagline: "Passive investing. Maximum growth. Minimum effort.",
-    description:
-      "We design a diversified ETF portfolio matched to your risk profile, time horizon, and financial goals. Set up a monthly Sparplan and let compound interest do the work.",
-    features: [
-      "Risk profile assessment",
-      "Diversified global allocation",
-      "Low-cost broker setup",
-      "Monthly Sparplan structure",
-    ],
-    cta: "Start Investing",
-  },
-  {
-    icon: Sunset,
-    color: "#F97316",
-    bg: "rgba(249,115,22,0.1)",
-    title: "Retirement Planning",
-    german: "Altersvorsorge",
-    roadmapStep: 5,
-    stepLabel: "Retirement Planning",
-    tagline: "Build the retirement you deserve — starting today.",
-    description:
-      "Germany's state pension alone won't be enough. We combine Riester, Rürup, and private ETF strategies to build a comprehensive Altersvorsorge plan for your expat life.",
-    features: [
-      "Riester Rente evaluation",
-      "Rürup pension for self-employed",
-      "Private pension supplements",
-      "Expat-specific exit strategies",
-    ],
-    cta: "Plan My Retirement",
-  },
-];
+import { useLang } from "../context/LanguageContext";
 
 const stepColors: Record<number, string> = {
   1: "#60A5FA",
@@ -157,6 +22,110 @@ const stepColors: Record<number, string> = {
 };
 
 export function Services() {
+  const { t } = useLang();
+
+  const services = [
+    {
+      icon: Heart,
+      color: "#EF4444",
+      bg: "rgba(239,68,68,0.1)",
+      roadmapStep: 1,
+      title: t("services.s1.title"),
+      german: t("services.s1.german"),
+      stepLabel: t("services.s1.stepLabel"),
+      tagline: t("services.s1.tagline"),
+      description: t("services.s1.desc"),
+      features: [t("services.s1.f1"), t("services.s1.f2"), t("services.s1.f3"), t("services.s1.f4")],
+      cta: t("services.s1.cta"),
+    },
+    {
+      icon: Shield,
+      color: "#A78BFA",
+      bg: "rgba(167,139,250,0.1)",
+      roadmapStep: 2,
+      title: t("services.s2.title"),
+      german: t("services.s2.german"),
+      stepLabel: t("services.s2.stepLabel"),
+      tagline: t("services.s2.tagline"),
+      description: t("services.s2.desc"),
+      features: [t("services.s2.f1"), t("services.s2.f2"), t("services.s2.f3"), t("services.s2.f4")],
+      cta: t("services.s2.cta"),
+    },
+    {
+      icon: FileText,
+      color: "#F59E0B",
+      bg: "rgba(245,158,11,0.1)",
+      roadmapStep: 2,
+      title: t("services.s3.title"),
+      german: t("services.s3.german"),
+      stepLabel: t("services.s3.stepLabel"),
+      tagline: t("services.s3.tagline"),
+      description: t("services.s3.desc"),
+      features: [t("services.s3.f1"), t("services.s3.f2"), t("services.s3.f3"), t("services.s3.f4")],
+      cta: t("services.s3.cta"),
+    },
+    {
+      icon: Scale,
+      color: "#60A5FA",
+      bg: "rgba(96,165,250,0.1)",
+      roadmapStep: 2,
+      title: t("services.s4.title"),
+      german: t("services.s4.german"),
+      stepLabel: t("services.s4.stepLabel"),
+      tagline: t("services.s4.tagline"),
+      description: t("services.s4.desc"),
+      features: [t("services.s4.f1"), t("services.s4.f2"), t("services.s4.f3"), t("services.s4.f4")],
+      cta: t("services.s4.cta"),
+    },
+    {
+      icon: PiggyBank,
+      color: "#34D399",
+      bg: "rgba(52,211,153,0.1)",
+      roadmapStep: 3,
+      title: t("services.s5.title"),
+      german: t("services.s5.german"),
+      stepLabel: t("services.s5.stepLabel"),
+      tagline: t("services.s5.tagline"),
+      description: t("services.s5.desc"),
+      features: [t("services.s5.f1"), t("services.s5.f2"), t("services.s5.f3"), t("services.s5.f4")],
+      cta: t("services.s5.cta"),
+    },
+    {
+      icon: TrendingUp,
+      color: "#00D4AA",
+      bg: "rgba(0,212,170,0.1)",
+      roadmapStep: 4,
+      title: t("services.s6.title"),
+      german: t("services.s6.german"),
+      stepLabel: t("services.s6.stepLabel"),
+      tagline: t("services.s6.tagline"),
+      description: t("services.s6.desc"),
+      features: [t("services.s6.f1"), t("services.s6.f2"), t("services.s6.f3"), t("services.s6.f4")],
+      cta: t("services.s6.cta"),
+    },
+    {
+      icon: Sunset,
+      color: "#F97316",
+      bg: "rgba(249,115,22,0.1)",
+      roadmapStep: 5,
+      title: t("services.s7.title"),
+      german: t("services.s7.german"),
+      stepLabel: t("services.s7.stepLabel"),
+      tagline: t("services.s7.tagline"),
+      description: t("services.s7.desc"),
+      features: [t("services.s7.f1"), t("services.s7.f2"), t("services.s7.f3"), t("services.s7.f4")],
+      cta: t("services.s7.cta"),
+    },
+  ];
+
+  const roadmapSteps = [
+    { n: 1, label: t("services.step1") },
+    { n: 2, label: t("services.step2") },
+    { n: 3, label: t("services.step3") },
+    { n: 4, label: t("services.step4") },
+    { n: 5, label: t("services.step5") },
+  ];
+
   return (
     <div style={{ backgroundColor: "#F5F8FF" }}>
       {/* Hero */}
@@ -171,7 +140,7 @@ export function Services() {
           >
             <Plane size={13} style={{ color: "#00D4AA" }} />
             <span className="text-xs" style={{ color: "#00D4AA", fontWeight: 600 }}>
-              Complete Financial Services for Expats
+              {t("services.badge")}
             </span>
           </div>
           <h1
@@ -182,14 +151,13 @@ export function Services() {
               lineHeight: 1.15,
             }}
           >
-            Everything You Need to Thrive Financially in Germany
+            {t("services.heroTitle")}
           </h1>
           <p
             className="mt-5"
             style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem", lineHeight: 1.7 }}
           >
-            Each service maps directly to your Expat Financial Roadmap — so you
-            always know where you are and what comes next.
+            {t("services.heroSubtitle")}
           </p>
         </div>
       </section>
@@ -198,13 +166,7 @@ export function Services() {
       <section className="py-10" style={{ backgroundColor: "#0B1F3A" }}>
         <div className="max-w-5xl mx-auto px-4">
           <div className="flex items-center justify-between overflow-x-auto gap-2 pb-2">
-            {[
-              { n: 1, label: "Arrival" },
-              { n: 2, label: "Protection" },
-              { n: 3, label: "Foundation" },
-              { n: 4, label: "Investment" },
-              { n: 5, label: "Retirement" },
-            ].map((step, i) => (
+            {roadmapSteps.map((step, i) => (
               <div key={step.n} className="flex items-center gap-2 flex-shrink-0">
                 <div className="flex flex-col items-center">
                   <div
@@ -247,7 +209,7 @@ export function Services() {
                     boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 30px rgba(0,0,0,0.1)`;
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 30px rgba(0,0,0,0.1)";
                     (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
                   }}
                   onMouseLeave={(e) => {
@@ -265,7 +227,7 @@ export function Services() {
                         fontWeight: 600,
                       }}
                     >
-                      Step {s.roadmapStep}: {s.stepLabel}
+                      {t("services.stepPrefix")} {s.roadmapStep}: {s.stepLabel}
                     </div>
                   </div>
 
@@ -353,17 +315,17 @@ export function Services() {
               fontWeight: 800,
             }}
           >
-            Not sure where to start?
+            {t("services.notSure")}
           </h2>
           <p className="mt-4 mb-8" style={{ color: "rgba(255,255,255,0.55)", fontSize: "1.05rem" }}>
-            Book a free 30-minute consultation and we'll map out exactly what you need.
+            {t("services.ctaDesc")}
           </p>
           <Link
             to="/"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl"
             style={{ backgroundColor: "#00D4AA", color: "#0B1F3A", fontWeight: 700 }}
           >
-            Book Free Consultation <ArrowRight size={18} />
+            {t("services.ctaButton")} <ArrowRight size={18} />
           </Link>
         </div>
       </section>
